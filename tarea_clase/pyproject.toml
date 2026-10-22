@@ -1,0 +1,17 @@
+[project]
+name = "incendios-rio-tambo"
+version = "0.1.0"
+description = "Reto D: ¿a quién afectan los incendios del Perú? Población a 5 km de los incendios activos, octubre 2026"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "geopandas>=1.0",
+    "pandas",
+    "matplotlib",
+    "rasterio",
+    "rasterstats",
+    "pystac-client",
+    "planetary-computer",
+    "odc-stac",
+    "ipykernel",
+]

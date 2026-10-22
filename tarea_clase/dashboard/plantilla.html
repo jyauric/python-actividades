@@ -1,0 +1,1030 @@
+<meta charset="utf-8">
+<title>¿A quién afectan los incendios?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Public+Sans:ital,wght@0,400..700;1,400&display=swap">
+<style>
+/* Layout: parte de exposición. Barra fija con el corte → titular y cifras → dónde hay más gente cerca → mapa con lista → Río Tambo → departamentos → decisiones → método. */
+:root {
+  --bg: #f1f4f6;
+  --panel: #ffffff;
+  --panel-2: #f4f6f8;
+  --ink: #0f1b26;
+  --ink-2: #3b4956;
+  --ink-3: #65727e;
+  --line: #d7dde3;
+  --line-2: #bcc6cf;
+  --accent: #1b4f7e;
+  --accent-soft: #e4edf5;
+  --barra: #0f1b26;
+  --barra-ink: #eef2f5;
+  --barra-ink-2: #9aabba;
+  --map-land: #f7f8f9;
+  --map-line: #9aa6b1;
+  --map-sel: #1b4f7e;
+  --fire-24: #c62a1c;
+  --fire-7: #ec7a2c;
+  --fire-old: #f1b484;
+  --urbano: #7a8692;
+  --pob: #3d6a96;
+  --nube: #d9dfe5;
+  --crit: #c62a1c;
+  --warn: #9a6200;
+  --sombra: 0 1px 2px rgb(15 27 38 / 0.08), 0 6px 18px rgb(15 27 38 / 0.10);
+  --font-display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Public Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --radius: 6px;
+  --step--2: 0.75rem;
+  --step--1: 0.8125rem;
+  --step-0: 0.9375rem;
+  --step-1: 1.125rem;
+  --step-2: 1.5rem;
+  --step-3: 2.25rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1218; --panel: #121b24; --panel-2: #17222d; --ink: #e7edf2; --ink-2: #a8b5c1; --ink-3: #7f8d9a;
+    --line: #233140; --line-2: #34485a; --accent: #8cbbe6; --accent-soft: #16283a;
+    --barra: #060b10; --barra-ink: #e7edf2; --barra-ink-2: #8796a4;
+    --map-land: #17222c; --map-line: #3e4f5f; --map-sel: #8cbbe6;
+    --fire-24: #ff5b3a; --fire-7: #f08a3c; --fire-old: #9b6644; --urbano: #8593a0; --pob: #7fa9d4; --nube: #4a5763;
+    --crit: #f06262; --warn: #f5b22e;
+    --sombra: 0 1px 2px rgb(0 0 0 / 0.4), 0 6px 18px rgb(0 0 0 / 0.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1218; --panel: #121b24; --panel-2: #17222d; --ink: #e7edf2; --ink-2: #a8b5c1; --ink-3: #7f8d9a;
+  --line: #233140; --line-2: #34485a; --accent: #8cbbe6; --accent-soft: #16283a;
+  --barra: #060b10; --barra-ink: #e7edf2; --barra-ink-2: #8796a4;
+  --map-land: #17222c; --map-line: #3e4f5f; --map-sel: #8cbbe6;
+  --fire-24: #ff5b3a; --fire-7: #f08a3c; --fire-old: #9b6644; --urbano: #8593a0; --pob: #7fa9d4; --nube: #4a5763;
+  --crit: #f06262; --warn: #f5b22e;
+  --sombra: 0 1px 2px rgb(0 0 0 / 0.4), 0 6px 18px rgb(0 0 0 / 0.35);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: var(--step-0);
+  line-height: 1.5; margin: 0;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--barra); }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+h2 { font-size: var(--step-2); font-weight: 760; font-stretch: 88%; line-height: 1.15; }
+h3 { font-size: var(--step-1); font-weight: 700; font-stretch: 90%; line-height: 1.2; }
+p { margin: 0; }
+a { color: var(--accent); }
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow {
+  font-family: var(--font-display); font-stretch: 85%; font-weight: 650; font-size: var(--step--2);
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3);
+}
+.num { font-variant-numeric: tabular-nums; }
+.tenue { color: var(--ink-3); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); min-width: 0; }
+.panel > header { padding: 14px 16px 12px; border-bottom: 1px solid var(--line); display: grid; gap: 3px; }
+.panel > header p { font-size: var(--step--1); color: var(--ink-3); }
+.cuerpo { padding: 14px 16px 16px; display: grid; gap: 12px; }
+
+/* barra fija */
+.barra { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--barra); color: var(--barra-ink); }
+.barra-in {
+  max-width: 1440px; margin: 0 auto; min-height: 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0; display: flex; align-items: center; gap: 0 22px; flex-wrap: wrap;
+}
+.marca {
+  font-family: var(--font-display); font-weight: 760; font-stretch: 88%; font-size: 1rem; color: inherit; text-decoration: none;
+  display: inline-flex; gap: 9px; align-items: center; white-space: nowrap; padding-block: 12px;
+}
+.marca::before {
+  content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--fire-7);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--fire-7) 30%, transparent);
+}
+.barra nav { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; min-width: 0; flex: 1 1 auto; }
+.barra nav::-webkit-scrollbar { display: none; }
+.barra nav a {
+  color: var(--barra-ink-2); text-decoration: none; font-size: var(--step--1); font-weight: 600; white-space: nowrap;
+  padding: 13px 10px 11px; border-bottom: 2px solid transparent;
+}
+.barra nav a:hover { color: var(--barra-ink); }
+.barra nav a[aria-current="location"] { color: var(--barra-ink); border-bottom-color: var(--fire-7); }
+.corte-mini { display: inline-flex; gap: 8px; align-items: center; font-size: var(--step--1); color: var(--barra-ink-2); white-space: nowrap; }
+.corte-mini b { color: var(--barra-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+@media (max-width: 1100px) {
+  .barra nav { order: 3; flex-basis: 100%; margin-inline: -10px; }
+  .corte-mini { margin-left: auto; }
+}
+@media (max-width: 720px) { .barra { position: relative; top: 0; } }
+
+/* página */
+.envoltura {
+  max-width: 1440px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 56px; display: grid; gap: 44px;
+}
+.envoltura > section { scroll-margin-top: 64px; display: grid; gap: 14px; min-width: 0; }
+.sec-cabeza { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 6px 40px; align-items: end; }
+.sec-cabeza > div { display: grid; gap: 4px; }
+.sec-cabeza p { color: var(--ink-2); max-width: 72ch; }
+@media (max-width: 900px) { .sec-cabeza { grid-template-columns: minmax(0, 1fr); } }
+
+/* titular */
+.hero { padding-top: 36px; gap: 18px !important; }
+.hero-texto { display: grid; gap: 12px; max-width: 1080px; }
+.hero h1 { font-size: clamp(1.95rem, 4.1vw, 3.15rem); font-weight: 820; font-stretch: 86%; line-height: 1.03; letter-spacing: -0.014em; max-width: 26ch; }
+.hero h1 mark {
+  background: none; color: inherit; text-decoration: underline; text-decoration-color: var(--fire-7);
+  text-decoration-thickness: 0.085em; text-underline-offset: 0.13em; text-decoration-skip-ink: none;
+}
+.bajada { font-size: clamp(1.02rem, 1.4vw, 1.18rem); color: var(--ink-2); max-width: 72ch; line-height: 1.55; }
+.bajada strong { color: var(--ink); font-weight: 650; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: var(--step--1); color: var(--ink-3); }
+.meta b { color: var(--ink-2); font-weight: 600; }
+.aviso {
+  display: flex; gap: 10px; align-items: start; padding: 10px 14px; border: 1px solid var(--warn); border-radius: var(--radius);
+  background: color-mix(in srgb, var(--warn) 9%, var(--panel)); color: var(--ink); font-size: var(--step--1); max-width: 86ch;
+}
+.aviso::before {
+  content: "!"; flex: none; width: 18px; height: 18px; border-radius: 50%; background: var(--warn); color: var(--panel);
+  font-weight: 800; display: grid; place-items: center; font-size: 0.75rem; margin-top: 1px;
+}
+
+/* cifras */
+.cifras {
+  display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px;
+  background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+}
+.cifra { grid-row: span 3; display: grid; grid-template-rows: subgrid; row-gap: 6px; background: var(--panel); padding: 16px 18px 15px; min-width: 0; }
+.cifra .valor {
+  font-family: var(--font-display); font-stretch: 80%; font-weight: 760; font-size: var(--step-3); line-height: 1;
+  font-variant-numeric: tabular-nums; letter-spacing: -0.01em; align-self: end;
+}
+.cifra.critico .valor { color: var(--crit); }
+.cifra.pob .valor { color: var(--pob); }
+.cifra .nota { color: var(--ink-2); font-size: var(--step--1); line-height: 1.4; }
+.cifra .nota b { color: var(--ink); font-weight: 650; }
+@media (max-width: 1180px) { .cifras { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cifra { padding: 14px 14px 13px; } }
+.glosario { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 28px; margin: 0; font-size: var(--step--1); color: var(--ink-2); }
+.glosario div { min-width: 0; }
+.glosario dt { display: inline; font-weight: 650; color: var(--ink); }
+.glosario dt::after { content: ". "; }
+.glosario dd { display: inline; margin: 0; }
+@media (max-width: 900px) { .glosario { grid-template-columns: minmax(0, 1fr); } }
+
+/* rankings */
+.triage { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1000px) { .triage { grid-template-columns: minmax(0, 1fr); } }
+.tri { display: grid; grid-template-rows: auto 1fr; }
+.tri ol, .lista ol { list-style: none; margin: 0; padding: 4px 0 6px; }
+.fila-btn {
+  all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid;
+  grid-template-columns: 1.6em minmax(0, 1fr) auto; gap: 1px 10px; padding: 8px 16px; align-items: baseline;
+}
+.fila-btn:hover { background: var(--panel-2); }
+.fila-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.fila-btn[aria-pressed="true"] { background: var(--accent-soft); }
+.fila-btn .rank { font-size: var(--step--1); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.fila-btn .nom { font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.fila-btn .val { font-family: var(--font-display); font-stretch: 85%; font-weight: 700; font-variant-numeric: tabular-nums; text-align: right; }
+.fila-btn .det { grid-column: 2 / 4; font-size: var(--step--1); color: var(--ink-3); }
+.barrita { grid-column: 2 / 4; height: 4px; border-radius: 2px; background: var(--panel-2); overflow: hidden; }
+.barrita i { display: block; height: 100%; background: var(--pob); border-radius: 2px; }
+.chip {
+  display: inline-block; font-size: 0.6875rem; font-weight: 650; letter-spacing: 0.02em; padding: 1px 6px; border-radius: 3px;
+  margin-left: 6px; vertical-align: 1px; white-space: nowrap;
+}
+.chip.activo { background: color-mix(in srgb, var(--fire-24) 14%, var(--panel)); color: var(--fire-24); }
+.chip.urbano { background: var(--panel-2); color: var(--ink-2); border: 1px dashed var(--urbano); }
+
+/* mapa */
+.mapa-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .mapa-grid { grid-template-columns: minmax(0, 1fr); } }
+.controles { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.segmentado { display: inline-flex; border: 1px solid var(--line-2); border-radius: var(--radius); overflow: hidden; }
+.segmentado button {
+  all: unset; cursor: pointer; padding: 5px 12px; font-size: var(--step--1); font-weight: 600; color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.segmentado button + button { border-left: 1px solid var(--line-2); }
+.segmentado button[aria-pressed="true"] { background: var(--accent); color: var(--panel); }
+.segmentado button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+.boton {
+  all: unset; cursor: pointer; padding: 5px 12px; font-size: var(--step--1); font-weight: 600; color: var(--accent);
+  border: 1px solid var(--line-2); border-radius: var(--radius);
+}
+.boton:hover { background: var(--panel-2); }
+.boton:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.check { display: inline-flex; gap: 6px; align-items: center; font-size: var(--step--1); color: var(--ink-2); }
+.mapa-caja { position: relative; }
+#mapa-svg { display: block; width: 100%; height: min(78vh, 760px); cursor: grab; touch-action: none; }
+#mapa-svg:active { cursor: grabbing; }
+.dep { fill: var(--map-land); stroke: var(--map-line); stroke-width: 0.6; vector-effect: non-scaling-stroke; }
+.dep.sel { fill: var(--accent-soft); stroke: var(--map-sel); stroke-width: 1.6; }
+.inc { cursor: pointer; vector-effect: non-scaling-stroke; }
+.inc.activo { fill: var(--fire-24); fill-opacity: 0.82; stroke: var(--panel); stroke-width: 0.8; }
+.inc.pasado { fill: var(--fire-7); fill-opacity: 0.5; stroke: var(--fire-7); stroke-width: 0.6; }
+.inc.urbano { fill: none; stroke: var(--urbano); stroke-width: 1.4; stroke-dasharray: 3 2; }
+.inc.sel { stroke: var(--ink); stroke-width: 2.4; fill-opacity: 0.95; }
+.etiqueta { font-family: var(--font-body); font-size: 11px; font-weight: 650; fill: var(--ink); paint-order: stroke; stroke: var(--panel); stroke-width: 3px; pointer-events: none; }
+.leyenda { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 10px 14px 12px; border-top: 1px solid var(--line); font-size: var(--step--1); color: var(--ink-2); align-items: center; }
+.leyenda span { display: inline-flex; gap: 6px; align-items: center; }
+.sw { width: 11px; height: 11px; border-radius: 50%; display: inline-block; flex: none; }
+.sw.activo { background: var(--fire-24); }
+.sw.pasado { background: color-mix(in srgb, var(--fire-7) 55%, var(--panel)); border: 1px solid var(--fire-7); }
+.sw.urbano { border: 1.5px dashed var(--urbano); }
+.tip {
+  position: absolute; pointer-events: none; z-index: 5; background: var(--panel); border: 1px solid var(--line-2); border-radius: var(--radius);
+  box-shadow: var(--sombra); padding: 8px 10px; font-size: var(--step--1); max-width: 260px; display: grid; gap: 2px;
+}
+.tip[hidden] { display: none; }
+.tip b { font-weight: 650; }
+.tip .tenue { font-size: var(--step--2); }
+.lado { display: grid; gap: 16px; }
+.ficha { padding: 14px 16px; display: grid; gap: 10px; }
+.ficha-vacia { color: var(--ink-3); font-size: var(--step--1); }
+.datos-ficha { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; margin: 0; }
+.datos-ficha div { display: grid; gap: 1px; min-width: 0; }
+.datos-ficha dt { font-size: var(--step--2); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+.datos-ficha dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.lista ol { max-height: 440px; overflow: auto; }
+
+/* Río Tambo */
+.rt-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 16px; align-items: start; }
+@media (max-width: 1000px) { .rt-grid { grid-template-columns: minmax(0, 1fr); } }
+.rt-img { position: relative; width: 100%; max-width: 520px; margin-inline: auto; aspect-ratio: 254 / 321; background: var(--nube); border-radius: 4px; overflow: hidden; }
+.rt-img img, .rt-img svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.rampa { display: grid; gap: 3px; font-size: var(--step--2); color: var(--ink-3); max-width: 520px; margin-inline: auto; width: 100%; }
+.rampa-barra { height: 10px; border-radius: 2px; background: linear-gradient(90deg, #1a9850 0%, #91cf60 18%, #d9ef8b 32%, #fee08b 52%, #fc8d59 72%, #d73027 88%, #a50026 100%); }
+.rampa-ejes { position: relative; height: 1.2em; font-variant-numeric: tabular-nums; }
+.rampa-ejes span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.rampa-ejes span:first-child { transform: none; }
+.rampa-ejes span:last-child { transform: translateX(-100%); }
+.mini-cifras { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.mini-cifras > div { background: var(--panel); padding: 12px 14px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.mini-cifras .valor { font-family: var(--font-display); font-stretch: 80%; font-weight: 760; font-size: var(--step-2); line-height: 1; font-variant-numeric: tabular-nums; }
+.mini-cifras .nota { font-size: var(--step--1); color: var(--ink-2); line-height: 1.35; }
+@media (max-width: 560px) { .mini-cifras { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.rt-lado { display: grid; gap: 16px; min-width: 0; }
+.barras { display: grid; gap: 7px; }
+.barra-fila { display: grid; grid-template-columns: minmax(7.5em, auto) minmax(0, 1fr) 5.2em; gap: 10px; align-items: center; font-size: var(--step--1); }
+.barra-fila .et { color: var(--ink-2); }
+.barra-fila .pista { height: 16px; background: var(--panel-2); border-radius: 3px; overflow: hidden; }
+.barra-fila .pista i { display: block; height: 100%; border-radius: 3px; background: var(--line-2); }
+.barra-fila .v { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.barra-fila.base .et { color: var(--ink); font-weight: 650; }
+.barra-fila.base .pista i { background: var(--accent); }
+.svg-auto { display: block; width: 100%; height: auto; overflow: visible; }
+.svg-auto text { font-family: var(--font-body); font-size: 11px; fill: var(--ink-2); }
+.svg-auto .eje { stroke: var(--line-2); }
+.nota-fuente { font-size: var(--step--2); color: var(--ink-3); }
+
+/* tabla */
+.tabla-caja { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+th, td { padding: 8px 12px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font-weight: 650; color: var(--ink-2); background: var(--panel); position: sticky; top: 0; }
+th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; }
+th button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+th[aria-sort="descending"] button::after { content: "↓"; color: var(--accent); }
+th[aria-sort="ascending"] button::after { content: "↑"; color: var(--accent); }
+tbody tr { cursor: pointer; }
+tbody tr:hover td { background: var(--panel-2); }
+tbody tr.sel td { background: var(--accent-soft); }
+.celda-barra { display: inline-grid; grid-template-columns: 70px auto; gap: 8px; align-items: center; justify-content: end; }
+.celda-barra i { display: block; height: 6px; border-radius: 3px; background: var(--pob); justify-self: start; }
+.celda-barra.pct i { background: var(--fire-7); }
+
+/* decisiones */
+.dos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 900px) { .dos { grid-template-columns: minmax(0, 1fr); } }
+
+/* método */
+.metodo-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+@media (max-width: 1100px) { .metodo-grid { grid-template-columns: minmax(0, 1fr); } }
+.pasos { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; font-size: var(--step--1); color: var(--ink-2); }
+.pasos b, .limites b { color: var(--ink); font-weight: 650; }
+.limites { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; font-size: var(--step--1); color: var(--ink-2); }
+.fuentes td, .fuentes th { white-space: normal; text-align: left; vertical-align: top; }
+.pie { font-size: var(--step--1); color: var(--ink-3); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 4px; }
+</style>
+
+<header class="barra">
+  <div class="barra-in">
+    <a class="marca" href="#resumen">Incendios y población · Perú</a>
+    <nav aria-label="Secciones">
+      <a href="#resumen">Resumen</a>
+      <a href="#prioridad">Más gente cerca</a>
+      <a href="#mapa">Mapa</a>
+      <a href="#rio-tambo">Río Tambo</a>
+      <a href="#departamentos">Departamentos</a>
+      <a href="#decisiones">Decisiones</a>
+      <a href="#metodo">Fuentes y método</a>
+    </nav>
+    <span class="corte-mini">Focos VIIRS <b id="corte-barra">—</b></span>
+  </div>
+</header>
+
+<main class="envoltura">
+
+  <section class="hero" id="resumen">
+    <div class="hero-texto">
+      <span class="eyebrow">Reto D · ¿A quién afectan los incendios? · Octubre de 2026</span>
+      <h1><mark><span id="h-personas">—</span> personas</mark> viven a 5 km o menos de un incendio en el Perú</h1>
+      <p class="bajada" id="bajada">—</p>
+      <div class="meta">
+        <span>Focos: <b>NASA FIRMS, VIIRS S-NPP</b></span>
+        <span>Población: <b>WorldPop 2020, 1 km</b></span>
+        <span>Límites: <b>INEI, 1 874 distritos</b></span>
+        <span>Área quemada: <b>Sentinel-2 L2A</b></span>
+      </div>
+    </div>
+    <p class="aviso">Vivir a 5 km de un incendio es exposición, no afectación. Este número no mide humo, cultivos perdidos ni evacuaciones: dice cuánta gente vive cerca del fuego según un modelo de población.</p>
+    <div class="cifras" id="cifras">
+      <div class="cifra pob"><span class="eyebrow">Personas a ≤ 5 km</span><span class="valor" id="c-personas">—</span><span class="nota" id="c-personas-n">—</span></div>
+      <div class="cifra"><span class="eyebrow">Incendios con ≥ 3 focos</span><span class="valor" id="c-incendios">—</span><span class="nota" id="c-incendios-n">—</span></div>
+      <div class="cifra critico"><span class="eyebrow">Activos en 24 h</span><span class="valor" id="c-activos">—</span><span class="nota" id="c-activos-n">—</span></div>
+      <div class="cifra pob"><span class="eyebrow">Departamento más expuesto</span><span class="valor" id="c-dep">—</span><span class="nota" id="c-dep-n">—</span></div>
+      <div class="cifra"><span class="eyebrow">Río Tambo · área quemada</span><span class="valor" id="c-ha">—</span><span class="nota" id="c-ha-n">—</span></div>
+      <div class="cifra pob"><span class="eyebrow">Río Tambo · personas a ≤ 5 km</span><span class="valor" id="c-rt">—</span><span class="nota" id="c-rt-n">—</span></div>
+    </div>
+    <dl class="glosario">
+      <div><dt>Foco de calor</dt><dd>Píxel de 375 m donde el satélite VIIRS vio algo caliente. Puede ser un incendio, una quema agrícola o una fuente industrial.</dd></div>
+      <div><dt>Incendio</dt><dd>Focos a 1 km o menos entre sí y separados por 48 h o menos, con 3 focos como mínimo. Activo: con algún foco en las últimas 24 h del archivo.</dd></div>
+      <div><dt>Personas a ≤ 5 km</dt><dd>Suma de WorldPop dentro de 5 km de los focos. En los totales se unen los círculos antes de sumar, para no contar dos veces a nadie.</dd></div>
+    </dl>
+  </section>
+
+  <section id="prioridad">
+    <div class="sec-cabeza">
+      <div><span class="eyebrow">Ranking</span><h2>Dónde hay más gente cerca del fuego</h2></div>
+      <p>Al elegir una fila, el incendio o el departamento se marca en el mapa. El primer lugar no es un incendio forestal: es una fuente de calor junto a Trujillo, y por eso está marcado.</p>
+    </div>
+    <div class="triage">
+      <article class="panel tri">
+        <header><h3>Incendios con más personas cerca</h3><p>Personas a ≤ 5 km · todos los incendios de la semana</p></header>
+        <ol id="rank-todos"></ol>
+      </article>
+      <article class="panel tri">
+        <header><h3>Activos con más personas cerca</h3><p>Personas a ≤ 5 km · con focos en las últimas 24 h</p></header>
+        <ol id="rank-activos"></ol>
+      </article>
+      <article class="panel tri">
+        <header><h3>Mayor parte de la población expuesta</h3><p>% de la población del departamento a ≤ 5 km de un incendio</p></header>
+        <ol id="rank-deps"></ol>
+      </article>
+    </div>
+  </section>
+
+  <section id="mapa">
+    <div class="sec-cabeza">
+      <div><span class="eyebrow">Mapa nacional</span><h2>Incendios según la gente que vive cerca</h2></div>
+      <p>Cada círculo es un incendio; su tamaño es la población a 5 km. Arrastra para moverte, usa la rueda o pellizca para acercarte y pasa el cursor sobre un círculo para ver su ficha.</p>
+    </div>
+    <div class="mapa-grid">
+      <div class="panel">
+        <div class="controles">
+          <div class="segmentado" role="group" aria-label="Qué incendios mostrar">
+            <button type="button" id="f-todos" aria-pressed="true">Todos</button>
+            <button type="button" id="f-activos" aria-pressed="false">Activos 24 h</button>
+          </div>
+          <label class="check"><input type="checkbox" id="f-urbano" checked> Mostrar fuentes urbanas</label>
+          <button type="button" class="boton" id="ver-pais">Ver todo el país</button>
+        </div>
+        <div class="mapa-caja" id="mapa-caja">
+          <svg id="mapa-svg" viewBox="0 0 560 820" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Mapa del Perú con los incendios de la semana"></svg>
+          <div class="tip" id="tip" hidden></div>
+        </div>
+        <div class="leyenda" id="leyenda">
+          <span><i class="sw activo"></i>Con focos en 24 h</span>
+          <span><i class="sw pasado"></i>Sin focos en 24 h</span>
+          <span><i class="sw urbano"></i>Probable fuente urbana</span>
+          <span id="ley-tam"></span>
+        </div>
+      </div>
+      <div class="lado">
+        <article class="panel">
+          <header><h3>Ficha del incendio</h3><p>Elige un incendio en el mapa o en las listas</p></header>
+          <div class="ficha" id="ficha"><p class="ficha-vacia">Ningún incendio elegido.</p></div>
+        </article>
+        <article class="panel lista">
+          <header><h3 id="lista-titulo">Incendios por personas a ≤ 5 km</h3><p id="lista-sub">—</p></header>
+          <ol id="lista"></ol>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="rio-tambo">
+    <div class="sec-cabeza">
+      <div><span class="eyebrow">Caso de estudio · Satipo, Junín</span><h2>Río Tambo: un incendio grande con poca gente cerca</h2></div>
+      <p id="rt-texto">—</p>
+    </div>
+    <div class="rt-grid">
+      <article class="panel">
+        <header><h3>Severidad del quemado (dNBR)</h3><p id="rt-img-sub">—</p></header>
+        <div class="cuerpo">
+          <div class="rt-img">
+            <img id="rt-png" alt="Mapa de dNBR de Río Tambo: rojo es quemado, verde es vegetación sin cambio, blanco son nubes">
+            <svg id="rt-svg" preserveAspectRatio="none" aria-hidden="true"></svg>
+          </div>
+          <div class="rampa">
+            <div class="rampa-barra"></div>
+            <div class="rampa-ejes" id="rampa-ejes"></div>
+            <span>dNBR: verde sin cambio, rojo quemado. Gris liso: nubes o sombras en la imagen del 13 oct. Puntos: focos VIIRS por día.</span>
+          </div>
+        </div>
+      </article>
+      <div class="rt-lado">
+        <div class="mini-cifras" id="rt-cifras"></div>
+        <article class="panel">
+          <header><h3>Por qué las hectáreas son un mínimo</h3><p>Las imágenes y los focos no coinciden en el tiempo</p></header>
+          <div class="cuerpo"><svg class="svg-auto" id="rt-linea" role="img" aria-label="Línea de tiempo del incendio de Río Tambo"></svg></div>
+        </article>
+        <article class="panel">
+          <header><h3>Hectáreas según el umbral de dNBR</h3><p>El umbral decide qué se cuenta como quemado</p></header>
+          <div class="cuerpo">
+            <div class="barras" id="rt-umbral"></div>
+            <p class="nota-fuente">Referencia oficial: unas 1 000 ha según Defensa Civil y SERFOR (vía Mongabay).</p>
+          </div>
+        </article>
+        <article class="panel">
+          <header><h3>Focos por pasada del satélite</h3><p>Los 62 focos del incendio principal, en hora UTC</p></header>
+          <div class="cuerpo"><div class="barras" id="rt-pasadas"></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="departamentos">
+    <div class="sec-cabeza">
+      <div><span class="eyebrow">Por departamento</span><h2>Cuánta gente vive cerca, en números y en proporción</h2></div>
+      <p>50 000 personas no pesan igual en Lima que en Madre de Dios. La última columna divide las personas expuestas entre la población del departamento. Ordena con los encabezados; al elegir una fila, el departamento se marca en el mapa.</p>
+    </div>
+    <div class="panel tabla-caja">
+      <table id="tabla-deps">
+        <thead><tr>
+          <th scope="col" data-k="departamento"><button type="button">Departamento</button></th>
+          <th scope="col" data-k="incendios"><button type="button">Incendios</button></th>
+          <th scope="col" data-k="activos_24h"><button type="button">Activos 24 h</button></th>
+          <th scope="col" data-k="focos"><button type="button">Focos</button></th>
+          <th scope="col" data-k="personas_5km" aria-sort="descending"><button type="button">Personas a ≤ 5 km</button></th>
+          <th scope="col" data-k="poblacion_dep"><button type="button">Población</button></th>
+          <th scope="col" data-k="pct_expuesta"><button type="button">% expuesta</button></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="decisiones">
+    <div class="sec-cabeza">
+      <div><span class="eyebrow">Sensibilidad</span><h2>La computadora siempre da un número; las decisiones lo mueven</h2></div>
+      <p>El mismo análisis con una decisión distinta cada vez. En azul, el valor usado. El radio es lo que más pesa: de 2 a 10 km, las personas expuestas se multiplican por <b id="mult-radio">—</b>.</p>
+    </div>
+    <div class="dos">
+      <article class="panel">
+        <header><h3>Radio de exposición</h3><p>Personas a la distancia elegida, sin doble conteo · incendios con ≥ 3 focos</p></header>
+        <div class="cuerpo"><div class="barras" id="s-radio"></div></div>
+      </article>
+      <article class="panel">
+        <header><h3>Focos mínimos para llamarlo incendio</h3><p>Personas a ≤ 5 km, sin doble conteo · entre paréntesis, cuántos incendios quedan</p></header>
+        <div class="cuerpo"><div class="barras" id="s-focos"></div></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="metodo">
+    <div class="sec-cabeza">
+      <div><span class="eyebrow">Fuentes y método</span><h2>Cómo se calculó y qué no puede decir</h2></div>
+      <p>Todo el cálculo está en el notebook <code>01_ubicar_incendio.ipynb</code> del <a href="https://github.com/jyauric/python-intermedio-tareas/tree/main/tarea_clases">repositorio</a>. Esta página solo lee las tablas que el notebook guarda en <code>resultados/</code>.</p>
+    </div>
+    <div class="metodo-grid">
+      <article class="panel">
+        <header><h3>Método</h3></header>
+        <div class="cuerpo">
+          <ol class="pasos">
+            <li><b>Focos.</b> Focos VIIRS de 7 días dentro del Perú, sin los de confianza baja.</li>
+            <li><b>Incendios.</b> Focos a ≤ 1 km y ≤ 48 h se unen en un incendio (componentes conectados); se quedan los de ≥ 3 focos.</li>
+            <li><b>Exposición.</b> Círculo de 5 km alrededor de los focos de cada incendio, en metros (UTM 18S), y suma de WorldPop con <code>zonal_stats</code>.</li>
+            <li><b>Validación.</b> Población total de WorldPop: 33 millones. Revisión de los incendios con más gente cerca: Huanchaco queda marcado como fuente urbana.</li>
+            <li><b>Río Tambo.</b> NBR con las bandas B08 y B12 de Sentinel-2, nubes enmascaradas con SCL; quemado si dNBR ≥ 0,27.</li>
+          </ol>
+        </div>
+      </article>
+      <article class="panel">
+        <header><h3>Datos y fechas</h3></header>
+        <div class="tabla-caja">
+          <table class="fuentes">
+            <thead><tr><th scope="col">Dato</th><th scope="col">Fuente y fecha</th></tr></thead>
+            <tbody>
+              <tr><td>Focos de calor</td><td>NASA FIRMS, VIIRS S-NPP «South America 7d», <span id="f-focos">—</span></td></tr>
+              <tr><td>Población</td><td>WorldPop 2020, 1 km, ajustado a la ONU</td></tr>
+              <tr><td>Límites</td><td>INEI, 1 874 distritos con UBIGEO</td></tr>
+              <tr><td>Imágenes</td><td>Sentinel-2 L2A, Microsoft Planetary Computer: <span id="f-s2">—</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+      <article class="panel">
+        <header><h3>Limitaciones</h3></header>
+        <div class="cuerpo">
+          <ul class="limites">
+            <li><b>Un foco de calor no es un incendio.</b> Huanchaco son 3 focos de una sola pasada nocturna en el desierto: probablemente quema de residuos o una industria.</li>
+            <li><b>Exposición no es afectación.</b> El humo llega más lejos que 5 km y nadie se evacúa por vivir a 4 km.</li>
+            <li><b>WorldPop es un modelo.</b> A 1 km subestima a las comunidades dispersas, como las asháninkas de Río Tambo.</li>
+            <li><b>Las nubes esconden el fuego.</b> VIIRS no ve bajo nubes ni bajo dosel cerrado, y la imagen del 13 oct tapa parte de los focos.</li>
+            <li><b>Siete días.</b> Los incendios que empezaron antes del 14 oct aparecen incompletos.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+    <div class="pie">
+      <p>Trabajo de curso, Ciencia de Datos con Python, Universidad del Pacífico. Hecho con datos públicos; no reemplaza los reportes del COEN, INDECI, SERFOR ni SERNANP.</p>
+    </div>
+  </section>
+</main>
+
+<script id="datos" type="application/json">__DATOS__</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById("datos").textContent);
+  const L = d3.formatLocale({ decimal: ",", thousands: " ", grouping: [3], currency: ["", ""] });
+  const n0 = L.format(",.0f");
+  const n1 = L.format(",.1f");
+  const pct = (v) => L.format(".0f")(v) + " %";
+  const MES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  const fecha = (s) => `${+s.slice(8, 10)} ${MES[+s.slice(5, 7) - 1]}`;
+  const hora = (s) => s.slice(11, 16);
+  const ACENTOS = {
+    "APURIMAC": "Apurímac", "HUANUCO": "Huánuco", "JUNIN": "Junín", "SAN MARTIN": "San Martín", "ANCASH": "Áncash",
+    "RIO TAMBO": "Río Tambo", "TAHUANIA": "Tahuanía", "HUANOQUITE": "Huanoquite", "CONCEPCION": "Concepción",
+    "MITO": "Mito", "PERU": "Perú"
+  };
+  const MENORES = new Set(["de", "del", "la", "las", "los", "y", "el"]);
+  const nombre = (s) => ACENTOS[s] || s.toLowerCase().split(" ")
+    .map((w, i) => (i > 0 && MENORES.has(w)) ? w : w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  const $ = (id) => document.getElementById(id);
+  const txt = (id, v) => { $(id).textContent = v; };
+
+  const R = D.resumen;
+  const RT = D.rio_tambo;
+  const incendios = D.incendios.map((d) => ({ ...d, activo: d.activo_24h === true || d.activo_24h === "True",
+    urbano: d.posible_fuente_urbana === true || d.posible_fuente_urbana === "True" }));
+  const porId = new Map(incendios.map((d) => [d.incendio, d]));
+  const deps = D.departamentos;
+  const sens = D.sensibilidad;
+  const base = sens.find((s) => s.RADIO_M === 5000 && s.MIN_FOCOS === 3);
+  const etiqueta = (d) => `${nombre(d.distrito)} (${nombre(d.departamento)})`;
+
+  // ---------- titular y cifras ----------
+  const corte = `${fecha(R.desde)} – ${fecha(R.hasta)} ${R.hasta.slice(0, 4)}`;
+  txt("corte-barra", corte);
+  txt("h-personas", n0(R.personas_5km));
+  const depTop = deps.slice().sort((a, b) => b.pct_expuesta - a.pct_expuesta)[0];
+  const sinUrb = incendios.filter((d) => !d.urbano).sort((a, b) => b.personas_5km - a.personas_5km)[0];
+  const urb = incendios.filter((d) => d.urbano).sort((a, b) => b.personas_5km - a.personas_5km)[0];
+  const rt = porId.get(RT.incendio);
+  const ordenFocos = incendios.slice().sort((a, b) => b.focos - a.focos);
+  const puestoRT = ordenFocos.findIndex((d) => d.incendio === RT.incendio) + 1;
+
+  const baj = $("bajada");
+  baj.replaceChildren();
+  const parte = (t, fuerte) => { const e = document.createElement(fuerte ? "strong" : "span"); e.textContent = t; baj.append(e); };
+  parte(`Entre el ${fecha(R.desde)} y el ${fecha(R.hasta)} de ${R.hasta.slice(0, 4)}, los satélites registraron `);
+  parte(`${n0(R.incendios)} incendios`, true);
+  parte(` con 3 focos o más. `);
+  parte(nombre(depTop.departamento), true);
+  parte(` es el departamento más expuesto: el ${pct(depTop.pct_expuesta)} de su población vive cerca de uno. Y Río Tambo, el ${puestoRT}.º incendio con más focos del país, tiene apenas `);
+  parte(`${n0(rt.personas_5km)} personas`, true);
+  parte(` a 5 km según WorldPop.`);
+
+  txt("c-personas", n0(R.personas_5km));
+  txt("c-personas-n", `Sin la fuente urbana de ${nombre(urb.distrito)}: ${n0(R.personas_5km_sin_fuentes_urbanas)}`);
+  txt("c-incendios", n0(R.incendios));
+  txt("c-incendios-n", `Del ${fecha(R.desde)} al ${fecha(R.hasta)}; los grupos de 1 o 2 focos se descartan`);
+  txt("c-activos", n0(R.activos_24h));
+  txt("c-activos-n", `${n0(R.personas_5km_activos_24h)} personas viven a ≤ 5 km de ellos`);
+  txt("c-dep", pct(depTop.pct_expuesta));
+  txt("c-dep-n", `${nombre(depTop.departamento)}: ${n0(depTop.personas_5km)} de ${n0(depTop.poblacion_dep)} habitantes`);
+  txt("c-ha", `${n0(RT.ha_quemadas)} ha`);
+  txt("c-ha-n", `dNBR ≥ ${String(RT.umbral).replace(".", ",")}, del ${fecha(RT.fecha_antes)} al ${fecha(RT.fecha_despues)}`);
+  txt("c-rt", n0(RT.personas_5km));
+  txt("c-rt-n", `${RT.focos} focos; ${n0(RT.personas_5km_max)} si se cuentan los píxeles del borde`);
+
+  // ---------- selección compartida ----------
+  const estado = { filtro: "todos", urbano: true, sel: null, dep: null };
+  const oyentes = [];
+  const avisar = () => oyentes.forEach((f) => f());
+  function elegirIncendio(id, ir) {
+    estado.sel = id; estado.dep = null;
+    const d = porId.get(id);
+    if (d && d.urbano && !estado.urbano) { estado.urbano = true; $("f-urbano").checked = true; }
+    if (d && !d.activo && estado.filtro === "activos") ponerFiltro("todos");
+    avisar();
+    if (ir) { $("mapa").scrollIntoView(); acercarA(d); }
+  }
+  function elegirDep(dep, ir) {
+    estado.dep = dep; estado.sel = null; avisar();
+    if (ir) { $("mapa").scrollIntoView(); acercarDep(dep); }
+  }
+
+  // ---------- rankings ----------
+  function filaBoton(ol, i, nom, val, det, frac, onClick, esSel, chips) {
+    const li = document.createElement("li");
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "fila-btn";
+    const r = document.createElement("span"); r.className = "rank"; r.textContent = i + 1;
+    const n = document.createElement("span"); n.className = "nom"; n.textContent = nom;
+    (chips || []).forEach(([cls, t]) => { const c = document.createElement("span"); c.className = "chip " + cls; c.textContent = t; n.append(c); });
+    const v = document.createElement("span"); v.className = "val"; v.textContent = val;
+    const de = document.createElement("span"); de.className = "det"; de.textContent = det;
+    const ba = document.createElement("span"); ba.className = "barrita";
+    const bi = document.createElement("i"); bi.style.width = (100 * frac).toFixed(1) + "%"; ba.append(bi);
+    b.append(r, n, v, de, ba);
+    b.addEventListener("click", onClick);
+    b.dataset.sel = esSel;
+    li.append(b); ol.append(li);
+    return b;
+  }
+  const chipsDe = (d) => [d.urbano ? ["urbano", "fuente urbana"] : null, d.activo ? ["activo", "activo"] : null].filter(Boolean);
+  function rankIncendios(olId, lista) {
+    const ol = $(olId); ol.replaceChildren();
+    const max = d3.max(lista, (d) => d.personas_5km) || 1;
+    lista.forEach((d, i) => filaBoton(ol, i, etiqueta(d), n0(d.personas_5km),
+      `${d.focos} focos · ${fecha(d.desde)}${fecha(d.desde) !== fecha(d.hasta) ? " – " + fecha(d.hasta) : ""}`,
+      d.personas_5km / max, () => elegirIncendio(d.incendio, true), "i" + d.incendio, chipsDe(d)));
+  }
+  const porPersonas = (a, b) => b.personas_5km - a.personas_5km;
+  rankIncendios("rank-todos", incendios.slice().sort(porPersonas).slice(0, 7));
+  rankIncendios("rank-activos", incendios.filter((d) => d.activo).sort(porPersonas).slice(0, 7));
+  (function () {
+    const ol = $("rank-deps"); ol.replaceChildren();
+    const lista = deps.slice().sort((a, b) => b.pct_expuesta - a.pct_expuesta).slice(0, 7);
+    const max = lista[0].pct_expuesta;
+    lista.forEach((d, i) => filaBoton(ol, i, nombre(d.departamento), pct(d.pct_expuesta),
+      `${n0(d.personas_5km)} personas · ${d.incendios} incendios`, d.pct_expuesta / max,
+      () => elegirDep(d.departamento, true), "d" + d.departamento));
+  })();
+  oyentes.push(() => {
+    document.querySelectorAll(".fila-btn[data-sel]").forEach((b) => {
+      const s = b.dataset.sel;
+      b.setAttribute("aria-pressed", (s === "i" + estado.sel || s === "d" + estado.dep) ? "true" : "false");
+    });
+  });
+
+  // ---------- mapa ----------
+  const W = 560, H = 820;
+  const svg = d3.select("#mapa-svg");
+  const proy = d3.geoMercator().fitExtent([[10, 10], [W - 10, H - 10]], D.geo);
+  const camino = d3.geoPath(proy);
+  const g = svg.append("g");
+  const gDeps = g.append("g");
+  const gInc = g.append("g");
+  const gEt = g.append("g");
+  const pathsDep = gDeps.selectAll("path").data(D.geo.features).join("path")
+    .attr("class", "dep").attr("d", camino)
+    .on("click", (e, f) => elegirDep(f.properties.departamento, false));
+  const radio = d3.scaleSqrt().domain([0, d3.max(incendios, (d) => d.personas_5km)]).range([1.6, 30]);
+  incendios.forEach((d) => { const p = proy([d.lon, d.lat]); d.px = p[0]; d.py = p[1]; });
+  let k = 1;
+
+  const tip = $("tip");
+  const caja = $("mapa-caja");
+  function mostrarTip(e, d) {
+    tip.replaceChildren();
+    const linea = (t, cls) => { const s = document.createElement(cls === "b" ? "b" : "span"); if (cls && cls !== "b") s.className = cls; s.textContent = t; tip.append(s); };
+    linea(etiqueta(d), "b");
+    linea(`${n0(d.personas_5km)} personas a ≤ 5 km`);
+    linea(`${d.focos} focos en ${d.pasadas} pasada${d.pasadas > 1 ? "s" : ""} · ${fecha(d.desde)} – ${fecha(d.hasta)}`);
+    if (d.urbano) linea("Probable fuente urbana, no incendio forestal", "tenue");
+    else linea(d.activo ? "Con focos en las últimas 24 h" : "Sin focos en las últimas 24 h", "tenue");
+    tip.hidden = false;
+    moverTip(e);
+  }
+  function moverTip(e) {
+    const [x, y] = d3.pointer(e, caja);
+    const w = tip.offsetWidth, h = tip.offsetHeight, cw = caja.clientWidth;
+    let left = x + 14, top = y + 14;
+    if (left + w > cw - 4) left = Math.max(4, x - w - 14);
+    if (top + h > caja.clientHeight - 4) top = Math.max(4, y - h - 14);
+    tip.style.left = left + "px"; tip.style.top = top + "px";
+  }
+  const ocultarTip = () => { tip.hidden = true; };
+
+  function visibles() {
+    return incendios.filter((d) => (estado.filtro === "todos" || d.activo) && (estado.urbano || !d.urbano));
+  }
+  function dibujarMapa() {
+    const vs = visibles().slice().sort(porPersonas);   // los grandes abajo
+    gInc.selectAll("circle").data(vs, (d) => d.incendio).join("circle")
+      .attr("cx", (d) => d.px).attr("cy", (d) => d.py)
+      .attr("r", (d) => radio(d.personas_5km) / Math.sqrt(k))
+      .attr("class", (d) => "inc " + (d.urbano ? "urbano" : d.activo ? "activo" : "pasado") + (d.incendio === estado.sel ? " sel" : ""))
+      .on("mouseenter", mostrarTip).on("mousemove", moverTip).on("mouseleave", ocultarTip)
+      .on("click", (e, d) => elegirIncendio(d.incendio, false));
+    gInc.selectAll("circle.sel").raise();
+    pathsDep.classed("sel", (f) => f.properties.departamento === estado.dep);
+    const top = vs.slice(0, 5);
+    if (estado.sel && !top.some((d) => d.incendio === estado.sel) && porId.get(estado.sel)) top.push(porId.get(estado.sel));
+    // si dos etiquetas caen casi en el mismo lugar (Pucallpa), la segunda baja una línea
+    const puestas = [];
+    top.forEach((d) => {
+      const x = d.px + radio(d.personas_5km) / Math.sqrt(k) + 4 / k;
+      let y = d.py + 4 / k;
+      for (let i = 0; i < 3; i++) {
+        const choca = puestas.find((p) => Math.abs(p.y - y) < 12 / k && Math.abs(p.x - x) < 90 / k);
+        if (!choca) break;
+        y = choca.y + 13 / k;
+      }
+      puestas.push({ x, y }); d.lx = x; d.ly = y;
+    });
+    gEt.selectAll("text").data(top, (d) => d.incendio).join("text")
+      .attr("class", "etiqueta")
+      .attr("x", (d) => d.lx)
+      .attr("y", (d) => d.ly)
+      .attr("font-size", 11 / k).attr("stroke-width", 3 / k)
+      .text((d) => nombre(d.distrito) + (d.urbano ? " *" : ""));
+  }
+  const zoom = d3.zoom().scaleExtent([1, 14]).translateExtent([[0, 0], [W, H]])
+    .on("zoom", (e) => { k = e.transform.k; g.attr("transform", e.transform); ocultarTip(); dibujarMapa(); });
+  svg.call(zoom);
+  function irA(x0, y0, x1, y1, maxK) {
+    const kk = Math.min(maxK, 0.85 / Math.max((x1 - x0) / W, (y1 - y0) / H));
+    const t = d3.zoomIdentity.translate(W / 2, H / 2).scale(kk).translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+    const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    (quieto ? svg : svg.transition().duration(650)).call(zoom.transform, t);
+  }
+  function acercarA(d) { if (d) irA(d.px - 40, d.py - 40, d.px + 40, d.py + 40, 6); }
+  function acercarDep(dep) {
+    const f = D.geo.features.find((x) => x.properties.departamento === dep);
+    if (f) { const [[x0, y0], [x1, y1]] = camino.bounds(f); irA(x0, y0, x1, y1, 8); }
+  }
+  $("ver-pais").addEventListener("click", () => { estado.dep = null; avisar(); irA(0, 0, W, H, 1); });
+  function ponerFiltro(f) {
+    estado.filtro = f;
+    $("f-todos").setAttribute("aria-pressed", f === "todos");
+    $("f-activos").setAttribute("aria-pressed", f === "activos");
+  }
+  $("f-todos").addEventListener("click", () => { ponerFiltro("todos"); avisar(); });
+  $("f-activos").addEventListener("click", () => { ponerFiltro("activos"); avisar(); });
+  $("f-urbano").addEventListener("change", (e) => { estado.urbano = e.target.checked; avisar(); });
+  $("f-todos").textContent = `Todos (${n0(incendios.length)})`;
+  $("f-activos").textContent = `Activos 24 h (${n0(incendios.filter((d) => d.activo).length)})`;
+  oyentes.push(dibujarMapa);
+
+  // leyenda de tamaño
+  (function () {
+    const ley = $("ley-tam");
+    const ejemplos = [1000, 10000, 100000];
+    const el = $("mapa-svg");
+    const esc = Math.min(el.clientWidth / W, el.clientHeight / H) || 0.62;   // viewBox → píxeles en pantalla
+    const rr = ejemplos.map((v) => radio(v) * esc);
+    const w = d3.sum(rr, (r) => 2 * r) + 72, h = 2 * d3.max(rr) + 4;
+    const s = d3.create("svg").attr("width", w).attr("height", h + 14).attr("aria-hidden", "true");
+    let x = 14;
+    ejemplos.forEach((v, i) => {
+      s.append("circle").attr("cx", x + rr[i]).attr("cy", h - rr[i]).attr("r", rr[i])
+        .attr("fill", "none").attr("stroke", "currentColor").attr("stroke-width", 1);
+      s.append("text").attr("x", x + rr[i]).attr("y", h + 12).attr("text-anchor", "middle")
+        .attr("font-size", 10).attr("fill", "currentColor").text(v >= 1000 ? `${v / 1000} mil` : v);
+      x += 2 * rr[i] + 18;
+    });
+    ley.append("Tamaño: personas", s.node());
+  })();
+
+  // ficha y lista
+  function dibujarFicha() {
+    const f = $("ficha"); f.replaceChildren();
+    const d = porId.get(estado.sel);
+    if (!d) {
+      const p = document.createElement("p"); p.className = "ficha-vacia";
+      p.textContent = estado.dep ? `Departamento elegido: ${nombre(estado.dep)}. Elige un incendio para ver su ficha.` : "Ningún incendio elegido.";
+      f.append(p); return;
+    }
+    const h = document.createElement("h3"); h.textContent = etiqueta(d);
+    chipsDe(d).forEach(([cls, t]) => { const c = document.createElement("span"); c.className = "chip " + cls; c.textContent = t; h.append(c); });
+    const dl = document.createElement("dl"); dl.className = "datos-ficha";
+    const par = (k2, v) => { const w = document.createElement("div"); const dt = document.createElement("dt"); dt.textContent = k2; const dd = document.createElement("dd"); dd.textContent = v; w.append(dt, dd); dl.append(w); };
+    par("Personas a ≤ 5 km", `${n0(d.personas_5km)} – ${n0(d.personas_5km_max)}`);
+    par("Provincia", nombre(d.provincia));
+    par("Focos", `${d.focos} en ${d.pasadas} pasada${d.pasadas > 1 ? "s" : ""}`);
+    par("Potencia radiativa", `${n1(d.frp_MW)} MW`);
+    par("Primer foco", `${fecha(d.desde)}, ${hora(d.desde)} UTC`);
+    par("Último foco", `${fecha(d.hasta)}, ${hora(d.hasta)} UTC`);
+    f.append(h, dl);
+    if (d.urbano) {
+      const p = document.createElement("p"); p.className = "nota-fuente";
+      p.textContent = "Una sola pasada nocturna con poca potencia, en el desierto costero junto a Trujillo: no parece un incendio de vegetación.";
+      f.append(p);
+    }
+    if (d.incendio === RT.incendio) {
+      const a = document.createElement("a"); a.href = "#rio-tambo"; a.textContent = "Ver el caso de Río Tambo";
+      f.append(a);
+    }
+  }
+  function dibujarLista() {
+    const vs = visibles().sort(porPersonas);
+    const lista = estado.dep ? vs.filter((d) => d.departamento === estado.dep) : vs;
+    txt("lista-titulo", estado.dep ? `Incendios en ${nombre(estado.dep)}` : "Incendios por personas a ≤ 5 km");
+    txt("lista-sub", `${n0(lista.length)} incendio${lista.length === 1 ? "" : "s"} · ${estado.filtro === "activos" ? "solo activos en 24 h" : "toda la semana"}`);
+    const ol = $("lista"); ol.replaceChildren();
+    const max = d3.max(lista, (d) => d.personas_5km) || 1;
+    lista.slice(0, 40).forEach((d, i) => filaBoton(ol, i, etiqueta(d), n0(d.personas_5km), `${d.focos} focos · ${fecha(d.desde)}`,
+      d.personas_5km / max, () => elegirIncendio(d.incendio, false), "i" + d.incendio, chipsDe(d)));
+  }
+  oyentes.unshift(dibujarFicha, dibujarLista);
+
+  // ---------- Río Tambo ----------
+  const B = D.bordes;
+  const anchoM = B.x_max - B.x_min, altoM = B.y_max - B.y_min;
+  txt("rt-texto", `Fue el ${puestoRT}.º incendio con más focos del país esta semana (${RT.focos}), y Defensa Civil reporta que afectó a comunidades asháninkas. Pero según WorldPop solo ${n0(RT.personas_5km)} personas viven a 5 km: el incendio más grande no es el que tiene más gente cerca, y el modelo de población probablemente no ve bien a las comunidades dispersas.`);
+  txt("rt-img-sub", `Sentinel-2, ${fecha(RT.fecha_antes)} → ${fecha(RT.fecha_despues)} · píxel de 40 m · ${n1(anchoM / 1000)} × ${n1(altoM / 1000)} km`);
+  $("rt-png").src = D.dnbr_png;
+  (function () {
+    const s = d3.select("#rt-svg").attr("viewBox", `0 0 ${anchoM} ${altoM}`);
+    const dias = Array.from(new Set(D.focos_rt.map((f) => f.fecha_hora.slice(0, 10)))).sort();
+    const colorDia = d3.scaleOrdinal().domain(dias).range(["var(--fire-old)", "var(--fire-7)", "var(--fire-24)"].slice(-dias.length));
+    s.selectAll("circle").data(D.focos_rt).join("circle")
+      .attr("cx", (f) => f.x - B.x_min).attr("cy", (f) => B.y_max - f.y).attr("r", 95)
+      .attr("fill", (f) => colorDia(f.fecha_hora.slice(0, 10))).attr("stroke", "#111").attr("stroke-width", 22);
+    // barra de escala de 2 km y norte
+    const y0 = altoM - 420, x0 = 380;
+    s.append("rect").attr("x", x0 - 120).attr("y", y0 - 520).attr("width", 2240).attr("height", 760).attr("fill", "#ffffff").attr("fill-opacity", 0.82).attr("rx", 60);
+    s.append("rect").attr("x", x0).attr("y", y0).attr("width", 2000).attr("height", 70).attr("fill", "#111");
+    // texto en coordenadas de metros, sin deformar: se dibuja aparte en HTML
+    const leyendaDias = d3.select(".rt-img").append("div")
+      .style("position", "absolute").style("left", "8px").style("top", "8px").style("background", "rgb(255 255 255 / 0.85)")
+      .style("color", "#111").style("border-radius", "4px").style("padding", "4px 8px").style("font-size", "11px")
+      .style("display", "grid").style("gap", "2px");
+    dias.forEach((dia) => {
+      const fila = leyendaDias.append("span").style("display", "inline-flex").style("gap", "6px").style("align-items", "center");
+      fila.append("i").style("width", "9px").style("height", "9px").style("border-radius", "50%").style("display", "inline-block")
+        .style("background", colorDia(dia)).style("border", "1px solid #111");
+      fila.append("span").text(`${fecha(dia)}: ${D.focos_rt.filter((f) => f.fecha_hora.startsWith(dia)).length} focos`);
+    });
+    d3.select(".rt-img").append("div")
+      .style("position", "absolute").style("left", `${100 * x0 / anchoM}%`).style("bottom", `${100 * (420 + 120) / altoM}%`)
+      .style("color", "#111").style("font-size", "11px").style("font-weight", "650").text("2 km");
+  })();
+  (function () {
+    const ejes = $("rampa-ejes");
+    [[-0.1, "−0,1"], [0.1, "0,1"], [0.27, "0,27"], [0.44, "0,44"], [0.66, "0,66"]].forEach(([v, t]) => {
+      const s = document.createElement("span"); s.textContent = t;
+      s.style.left = (100 * (v + 0.1) / 0.76) + "%"; ejes.append(s);
+    });
+  })();
+  (function () {
+    const c = $("rt-cifras");
+    const caja2 = (valor, nota) => {
+      const d = document.createElement("div");
+      const v = document.createElement("span"); v.className = "valor"; v.textContent = valor;
+      const n = document.createElement("span"); n.className = "nota"; n.textContent = nota;
+      d.append(v, n); c.append(d);
+    };
+    caja2(String(RT.focos), `focos VIIRS del ${fecha(rt.desde)} al ${fecha(rt.hasta)}`);
+    caja2(`${n0(RT.ha_quemadas)} ha`, `quemadas con dNBR ≥ ${String(RT.umbral).replace(".", ",")}`);
+    caja2(n0(RT.personas_5km), "personas a ≤ 5 km según WorldPop");
+    caja2(pct(100 * RT.nubes_antes), `nubes el ${fecha(RT.fecha_antes)}, imagen de antes`);
+    caja2(pct(100 * RT.nubes_despues), `nubes el ${fecha(RT.fecha_despues)}, imagen de después`);
+    caja2(pct(100 * RT.focos_bajo_nube), "de los focos caen bajo esas nubes");
+  })();
+
+  // línea de tiempo: fechas del análisis + el inicio reportado por Defensa Civil (4 oct)
+  function dibujarLinea() {
+    const s = d3.select("#rt-linea");
+    const w = Math.max(280, $("rt-linea").parentNode.clientWidth - 32 || 480);
+    const h = 120;
+    s.attr("viewBox", `0 0 ${w} ${h}`).selectAll("*").remove();
+    const anio = RT.fecha_antes.slice(0, 4);
+    const t0 = new Date(`${anio}-09-20`), t1 = new Date(`${R.hasta}`);
+    t1.setDate(t1.getDate() + 1);
+    const x = d3.scaleTime().domain([t0, t1]).range([10, w - 10]);
+    const yEje = 62;
+    s.append("line").attr("class", "eje").attr("x1", 10).attr("x2", w - 10).attr("y1", yEje).attr("y2", yEje);
+    const f0 = new Date(rt.desde.slice(0, 10)), f1 = new Date(rt.hasta.slice(0, 10)); f1.setDate(f1.getDate() + 1);
+    s.append("rect").attr("x", x(f0)).attr("y", yEje - 9).attr("width", Math.max(3, x(f1) - x(f0))).attr("height", 18)
+      .attr("rx", 3).style("fill", "var(--fire-24)").style("fill-opacity", 0.85);
+    const hitos = [
+      { d: RT.fecha_antes, t: "Imagen antes", s: pct(100 * RT.nubes_antes) + " nubes", arriba: true, color: "var(--accent)" },
+      { d: `${anio}-10-04`, t: "Inicio", s: "Defensa Civil", arriba: false, color: "var(--ink-3)" },
+      { d: RT.fecha_despues, t: "Imagen después", s: pct(100 * RT.nubes_despues) + " nubes", arriba: true, color: "var(--accent)" },
+      { d: rt.desde.slice(0, 10), t: `${RT.focos} focos VIIRS`, s: `${fecha(rt.desde)} – ${fecha(rt.hasta)}`, arriba: false, color: "var(--fire-24)", ancla: "start" },
+    ];
+    hitos.forEach((m) => {
+      const xx = x(new Date(m.d));
+      const y1 = m.arriba ? 12 : h - 22;
+      s.append("line").attr("x1", xx).attr("x2", xx).attr("y1", yEje).attr("y2", m.arriba ? 30 : h - 40)
+        .style("stroke", m.color).attr("stroke-width", 1.5);
+      if (m.d !== rt.desde.slice(0, 10)) s.append("circle").attr("cx", xx).attr("cy", yEje).attr("r", 5).style("fill", m.color);
+      const anc = m.ancla || (xx < 70 ? "start" : xx > w - 70 ? "end" : "middle");
+      const t = s.append("text").attr("x", xx).attr("y", y1).attr("text-anchor", anc);
+      t.append("tspan").attr("x", xx).attr("dy", 0).style("font-weight", 650).style("fill", "var(--ink)").text(m.t);
+      t.append("tspan").attr("x", xx).attr("dy", 13).text(m.s);
+    });
+  }
+
+  function barras(contenedor, filas2, formato) {
+    const c = $(contenedor); c.replaceChildren();
+    const max = d3.max(filas2, (f) => f.v) || 1;
+    filas2.forEach((f) => {
+      const fila = document.createElement("div"); fila.className = "barra-fila" + (f.base ? " base" : "");
+      const et = document.createElement("span"); et.className = "et"; et.textContent = f.et;
+      const pista = document.createElement("span"); pista.className = "pista";
+      const i = document.createElement("i"); i.style.width = (100 * f.v / max).toFixed(1) + "%";
+      if (f.color) i.style.background = f.color;
+      pista.append(i);
+      const v = document.createElement("span"); v.className = "v"; v.textContent = formato(f.v, f);
+      fila.append(et, pista, v); c.append(fila);
+    });
+  }
+  (function () {
+    const sev = D.severidad;
+    const corteDe = { "baja": 0.10, "moderada-baja": 0.27, "moderada-alta": 0.44, "alta": 0.66 };
+    const desde = (u) => d3.sum(sev.filter((s) => corteDe[s.clase] !== undefined && corteDe[s.clase] >= u - 1e-9), (s) => s.hectareas);
+    barras("rt-umbral", [0.10, 0.27, 0.44].map((u) => ({
+      et: `dNBR ≥ ${String(u).replace(".", ",")}`, v: desde(u), base: Math.abs(u - RT.umbral) < 1e-9,
+    })), (v) => `${n0(v)} ha`);
+    const porPasada = d3.rollups(D.focos_rt, (v) => v.length, (f) => f.fecha_hora).sort((a, b) => d3.ascending(a[0], b[0]));
+    barras("rt-pasadas", porPasada.map(([t, n]) => ({ et: `${fecha(t)}, ${hora(t)}`, v: n, color: "var(--fire-7)" })), (v) => `${v} focos`);
+  })();
+
+  // ---------- tabla de departamentos ----------
+  const orden = { k: "personas_5km", dir: -1 };
+  const maxPers = d3.max(deps, (d) => d.personas_5km), maxPct = d3.max(deps, (d) => d.pct_expuesta);
+  function dibujarTabla() {
+    const tb = document.querySelector("#tabla-deps tbody"); tb.replaceChildren();
+    const filas2 = deps.slice().sort((a, b) => {
+      const va = a[orden.k], vb = b[orden.k];
+      return orden.dir * (typeof va === "string" ? va.localeCompare(vb, "es") : va - vb);
+    });
+    filas2.forEach((d) => {
+      const tr = document.createElement("tr");
+      if (d.departamento === estado.dep) tr.className = "sel";
+      const celda = (t) => { const td = document.createElement("td"); td.textContent = t; tr.append(td); return td; };
+      celda(nombre(d.departamento));
+      celda(n0(d.incendios)); celda(n0(d.activos_24h)); celda(n0(d.focos));
+      const conBarra = (v, frac, cls) => {
+        const td = document.createElement("td"); const w = document.createElement("span"); w.className = "celda-barra" + (cls ? " " + cls : "");
+        const i = document.createElement("i"); i.style.width = Math.max(2, 70 * frac).toFixed(0) + "px";
+        const s = document.createElement("span"); s.textContent = v; w.append(i, s); td.append(w); tr.append(td);
+      };
+      conBarra(n0(d.personas_5km), d.personas_5km / maxPers);
+      celda(n0(d.poblacion_dep));
+      conBarra(L.format(".1f")(d.pct_expuesta) + " %", d.pct_expuesta / maxPct, "pct");
+      tr.addEventListener("click", () => elegirDep(d.departamento, true));
+      tb.append(tr);
+    });
+    document.querySelectorAll("#tabla-deps th").forEach((th) => {
+      th.setAttribute("aria-sort", th.dataset.k === orden.k ? (orden.dir < 0 ? "descending" : "ascending") : "none");
+    });
+  }
+  document.querySelectorAll("#tabla-deps th button").forEach((b) => b.addEventListener("click", () => {
+    const k2 = b.parentNode.dataset.k;
+    if (orden.k === k2) orden.dir *= -1; else { orden.k = k2; orden.dir = k2 === "departamento" ? 1 : -1; }
+    dibujarTabla();
+  }));
+  oyentes.push(dibujarTabla);
+
+  // ---------- sensibilidad ----------
+  (function () {
+    const radios = sens.filter((s) => s.MIN_FOCOS === base.MIN_FOCOS).sort((a, b) => a.RADIO_M - b.RADIO_M);
+    barras("s-radio", radios.map((s) => ({ et: `${s.RADIO_M / 1000} km`, v: s.personas, base: s.RADIO_M === base.RADIO_M })), (v) => n0(v));
+    const minimos = sens.filter((s) => s.RADIO_M === base.RADIO_M).sort((a, b) => a.MIN_FOCOS - b.MIN_FOCOS);
+    barras("s-focos", minimos.map((s) => ({ et: `≥ ${s.MIN_FOCOS} foco${s.MIN_FOCOS > 1 ? "s" : ""} (${n0(s.incendios)})`, v: s.personas, base: s.MIN_FOCOS === base.MIN_FOCOS })), (v) => n0(v));
+    const r2 = radios[0], r10 = radios[radios.length - 1];
+    txt("mult-radio", L.format(".0f")(r10.personas / r2.personas));
+  })();
+
+  // ---------- fuentes ----------
+  txt("f-focos", `del ${fecha(R.desde)} al ${fecha(R.hasta)} de ${R.hasta.slice(0, 4)}`);
+  txt("f-s2", `${fecha(RT.fecha_antes)} (${pct(100 * RT.nubes_antes)} de nubes) y ${fecha(RT.fecha_despues)} (${pct(100 * RT.nubes_despues)})`);
+
+  // ---------- navegación ----------
+  const enlaces = Array.from(document.querySelectorAll(".barra nav a"));
+  const secciones = enlaces.map((a) => document.querySelector(a.getAttribute("href")));
+  const obs = new IntersectionObserver((entradas) => {
+    entradas.forEach((en) => {
+      if (en.isIntersecting) {
+        enlaces.forEach((a) => a.removeAttribute("aria-current"));
+        const a = enlaces[secciones.indexOf(en.target)];
+        if (a) a.setAttribute("aria-current", "location");
+      }
+    });
+  }, { root: null, rootMargin: "-45% 0px -50% 0px" });
+  secciones.forEach((s) => s && obs.observe(s));
+
+  avisar();
+  dibujarLinea();
+  let espera;
+  window.addEventListener("resize", () => { clearTimeout(espera); espera = setTimeout(dibujarLinea, 150); });
+  const ancla = document.getElementById(location.hash.slice(1));
+  if (ancla) ancla.scrollIntoView();
+})();
+</script>
