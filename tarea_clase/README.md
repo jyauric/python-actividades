@@ -1,6 +1,6 @@
 # ¿A quién afectan los incendios del Perú?
 
-Reto D · Ciencia de Datos con Python · Universidad del Pacífico · octubre 2026
+Reto D · Ciencia de Datos con Python · octubre 2026
 
 ## Pregunta
 
