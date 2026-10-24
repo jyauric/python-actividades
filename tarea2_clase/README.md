@@ -22,12 +22,6 @@ de la tarea anterior ([`../tarea_clase/README.md`](../tarea_clase/README.md), co
 | 4. Voz | Modelo | Qwen3-TTS-12Hz-0.6B-Base clona 15 s de mi voz | `salidas/tmp/voz.wav` |
 | 5. Video | Modelos y código | Whisper, Pillow y ffmpeg | `reel.mp4`, `reel.srt`, `portada.png`, `posts.md` |
 
-Los scripts del profesor (`sessions/15-texto-a-reel`) no estaban publicados en el repositorio
-del curso, así que `guion.py` y `hacer_reel.py` se escribieron siguiendo las diapositivas de la
-sesión: guion como JSON (`frase`, `cifra`, `etiqueta`), alerta `¡¡` para cifras que no están en
-el texto, control de Whisper (si entiende mal más del 25 % de una escena, se genera otra vez),
-1080 × 1920 a 30 fps, audio a −14 LUFS y el aviso «Voz generada con IA» durante todo el video.
-
 ## Qué corregí del guion
 
 `guion.py` no marcó ninguna cifra con `¡¡`: todos los números estaban en el texto. Los errores
