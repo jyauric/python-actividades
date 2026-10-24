@@ -1,0 +1,63 @@
+{
+  "titulo": "¿Cuántas personas viven cerca de los incendios del Perú?",
+  "escenas": [
+    {
+      "frase": "¿Sabías que ~696 000 personas viven a 5 km o menos de algún incendio del Perú de esta semana?",
+      "cifra": "~696 000",
+      "etiqueta": "Personas expuestas a ≤ 5 km",
+      "imagen": "../tarea_clase/figs/01_mapa_nacional.png"
+    },
+    {
+      "frase": "Entre el 14 y el 21 de octubre de 2026 identifiqué 255 incendios con al menos tres focos.",
+      "cifra": "255",
+      "etiqueta": "Incendios con 3 o más focos",
+      "imagen": "../tarea_clase/figs/02_ranking.png",
+      "recorte": [
+        0,
+        0,
+        0.56,
+        1
+      ],
+      "nota": "Incendio = 3 o más focos de calor del satélite VIIRS a ≤ 1 km y ≤ 48 h entre sí."
+    },
+    {
+      "frase": "Ucayali concentra el mayor porcentaje, con ~150 000 personas expuestas, que representan el 26 % de su población.",
+      "cifra": "26 %",
+      "etiqueta": "Población expuesta en Ucayali",
+      "imagen": "../tarea_clase/figs/02_ranking.png",
+      "recorte": [
+        0.56,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "frase": "Ojo, vivir a cinco kilómetros es exposición, no afectación directa por humo o pérdida de cultivos.",
+      "cifra": "",
+      "etiqueta": "Exposición no es afectación directa"
+    },
+    {
+      "frase": "En Río Tambo se quemaron al menos ~1 085 hectáreas, pero solo ~1 060 personas viven a 5 km o menos.",
+      "cifra": "~1 085 ha",
+      "etiqueta": "Hectáreas quemadas en Río Tambo (mínimo)",
+      "imagen": "../tarea_clase/figs/04_rio_tambo_dnbr.png"
+    },
+    {
+      "frase": "Aunque WorldPop probablemente no ve bien a las comunidades asháninkas dispersas que el fuego sí afectó.",
+      "cifra": "",
+      "etiqueta": "Subestimación de comunidades dispersas",
+      "imagen": "../tarea_clase/figs/03_rio_tambo_poblacion.png"
+    },
+    {
+      "frase": "Mi hallazgo principal es claro: el incendio más grande no es el que tiene más gente cerca.",
+      "cifra": "",
+      "etiqueta": "Hallazgo principal del análisis"
+    }
+  ],
+  "posts": {
+    "linkedin": "Analicé la exposición de la población a los incendios del Perú entre el 14 y el 21 de octubre de 2026. Usando datos de NASA FIRMS, WorldPop y Sentinel-2, identifiqué 255 incendios con al menos tres focos. Cerca de 696 000 personas viven a ≤ 5 km de alguno, siendo Ucayali el departamento con mayor porcentaje expuesto (26 %). Es crucial distinguir exposición de afectación directa. Además, el caso de Río Tambo revela que el incendio más grande no es necesariamente el que tiene más gente cerca, y los modelos poblacionales pueden subestimar a las comunidades asháninkas dispersas. La ciencia de datos nos ayuda a tomar decisiones informadas.",
+    "instagram": "¿Sabías que ~696 000 personas viven a ≤ 5 km de alguno de los 255 incendios del Perú entre el 14 y el 21 de octubre? En Ucayali es el 26 % de su población. Ojo: exposición no es lo mismo que afectación directa. La ciencia de datos visibiliza estas realidades. 🔥📊 #CienciaDeDatos #IncendiosPerú #Python #MedioAmbiente #DatosAbiertos",
+    "x": "Del 14 al 21 de octubre de 2026, ~696 000 personas vivían a ≤ 5 km de alguno de los 255 incendios de Perú. Ucayali tiene el 26 % de su población expuesta. El incendio más grande no es el que tiene más gente cerca. #CienciaDeDatos #IncendiosPerú"
+  }
+}

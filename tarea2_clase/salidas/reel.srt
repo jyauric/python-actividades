@@ -1,0 +1,27 @@
+1
+00:00:01,500 --> 00:00:09,000
+¿Sabías que ~696 000 personas viven a 5 km o menos de algún incendio del Perú de esta semana?
+
+2
+00:00:09,312 --> 00:00:18,527
+Entre el 14 y el 21 de octubre de 2026 identifiqué 255 incendios con al menos tres focos.
+
+3
+00:00:18,839 --> 00:00:28,411
+Ucayali concentra el mayor porcentaje, con ~150 000 personas expuestas, que representan el 26 % de su población.
+
+4
+00:00:28,723 --> 00:00:35,795
+Ojo, vivir a cinco kilómetros es exposición, no afectación directa por humo o pérdida de cultivos.
+
+5
+00:00:36,107 --> 00:00:44,464
+En Río Tambo se quemaron al menos ~1 085 hectáreas, pero solo ~1 060 personas viven a 5 km o menos.
+
+6
+00:00:44,777 --> 00:00:52,491
+Aunque WorldPop probablemente no ve bien a las comunidades asháninkas dispersas que el fuego sí afectó.
+
+7
+00:00:52,804 --> 00:00:59,018
+Mi hallazgo principal es claro: el incendio más grande no es el que tiene más gente cerca.

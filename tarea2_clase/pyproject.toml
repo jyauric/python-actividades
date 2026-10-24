@@ -1,0 +1,17 @@
+[project]
+name = "tarea2-clase"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "faster-whisper>=1.2.1",
+    "imageio-ffmpeg>=0.6.0",
+    "jiwer>=4.0.0",
+    "num2words>=0.5.14",
+    "pillow>=12.3.0",
+    "pypdf>=6.21.2",
+    "qwen-tts>=0.1.1",
+    "soundfile>=0.14.0",
+]
+
+[tool.uv]
+python-preference = "only-managed"
