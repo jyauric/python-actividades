@@ -1,0 +1,41 @@
+[project]
+name = "tarea-2"
+version = "0.1.0"
+requires-python = "==3.12.*"
+dependencies = [
+    "streamlit>=1.38",
+    "pandas>=2.2,<3",
+    "plotly>=5.24",
+]
+
+[dependency-groups]
+docai = [
+    "paddleocr>=3.7",
+    "paddlepaddle>=3.2.1",
+    "torch>=2.8",
+    "transformers>=5.16",
+    "easyocr>=1.7",
+    "pillow>=10",
+]
+audio = [
+    "faster-whisper>=1.2.1",
+    "pyannote-audio>=4.0.7",
+    "accelerate>=1.10",
+    "jiwer>=4.0",
+    "rapidfuzz>=3.9",
+    "librosa>=0.11",
+    "soundfile>=0.13",
+    "scipy>=1.13",
+    "scikit-learn>=1.5",
+]
+notebooks = [
+    "ipykernel>=6.29",
+    "jupyterlab>=4",
+    "kaleido>=1.0",
+    "openai>=1.50",
+    "python-dotenv>=1.0",
+]
+
+[tool.uv]
+default-groups = []
+constraint-dependencies = ["opencv-python==4.10.0.84", "opencv-python-headless==4.10.0.84", "opencv-contrib-python==4.10.0.84", "av<19"]

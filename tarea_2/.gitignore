@@ -1,0 +1,13 @@
+# Corpus original y salidas pesadas
+datos/raw/
+# Pesos de modelos
+modelos/*.safetensors
+modelos/*.bin
+modelos/checkpoint-*/
+# Entorno virtual de uv (uv.lock y pyproject.toml sí se versionan)
+.venv/
+# Credenciales y sistema
+.env
+.DS_Store
+__pycache__/
+.ipynb_checkpoints/
