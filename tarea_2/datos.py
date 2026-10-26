@@ -1,16 +1,13 @@
-"""Descarga los audios de la sesión 13. Todos tienen licencia libre y se citan abajo.
+"""Descarga audios de OpenSLR 73 (adaptado de la Sesión 13 para la Tarea 2). Todos tienen licencia libre y se citan abajo.
 
-    uv run python sessions/13-audio-a-texto/datos.py
+    uv run python datos.py
 
-Qué baja (unos 60 MB en total) a sessions/13-audio-a-texto/data/:
+Qué baja a datos/raw/audio/:
 
 - Español peruano leído, con transcripción: OpenSLR 73, "Crowdsourced high-quality Peruvian
   Spanish speech data set" (Google, CC BY-SA 4.0). Solo se bajan las frases elegidas, no los
   900 MB de cada zip: se leen por partes con peticiones HTTP Range.
 - Inglés leído, con transcripción: FLEURS (Google, CC BY 4.0), también leído por partes.
-- Entrevistas reales de Wikimedia Commons (CC BY-SA 4.0): calle en El Agustino (Lima), una
-  dirigente de Fenmucarinap, saberes de plantas medicinales en quechua de Huaylas (Shansha,
-  Áncash) y una historia oral en inglés (Minnesota State University, Mankato).
 """
 import io
 import math
@@ -28,29 +25,7 @@ from scipy.signal import resample_poly
 
 CARPETA = Path(__file__).resolve().parent / "datos" / "raw" / "audio"
 SR = 16_000
-UA = {"User-Agent": "ds-python-up/2026 (https://github.com/d2cml-ai/Data-Science-Python)"}
-
-# nombre local: (archivo en Commons, autor, idioma, descripción corta)
-COMMONS = {
-    "agustino_1.ogg": ("Entrevista 1 en la Av. Rivagüero - El Agustino.ogg",
-                       "JorgeFlores-pe (Wikimedia Perú)", "es",
-                       "Entrevista en la calle a una vendedora de frutas, previa del repechaje Perú-Australia (2022)"),
-    "agustino_2.ogg": ("Entrevista 2 en la Av. Rivagüero - El Agustino.ogg",
-                       "JorgeFlores-pe (Wikimedia Perú)", "es",
-                       "Entrevista en la calle a dos vendedoras de dulces, mismo día"),
-    "aurora_coronado.ogg": ("Entrevista-Aurora Coronado-organización de mujeres indígenas-fiestas patrias.ogg",
-                            "QM Keen", "es",
-                            "Dirigente de Fenmucarinap (sierra central) durante una conferencia de prensa (2022)"),
-    "shansha_elena.ogg": ("Elena Figueroa - Entrevista sobre Españolada, Shansha, Áncash, Perú.ogg",
-                          "Figuemijun (proyecto Voces y plantas – Qurakuna Rimaykuy)", "qwh",
-                          "Entrevista en quechua de Huaylas sobre una planta medicinal (2026)"),
-    "shansha_maricela.ogg": ("Maricela Figueroa - Entrevista sobre Aurinsha, Shansha, Áncash, Perú.ogg",
-                             "Figuemijun (proyecto Voces y plantas – Qurakuna Rimaykuy)", "qwh",
-                             "Entrevista en quechua de Huaylas sobre una planta medicinal (2026)"),
-    "historia_oral_glines.ogg": ("Dr. Don E. Glines 2012 Oral History Interview Part Two.ogg",
-                                 "Don E. Glines, Heather Harren (Minnesota State University, Mankato)", "en",
-                                 "Historia oral de un docente de la Wilson Campus School (2012)"),
-}
+UA = {"User-Agent": "tarea2-ds-python/2026 (https://github.com/jyauric/python-actividades)"}
 
 OPENSLR73 = "https://www.openslr.org/resources/73/es_pe_{sexo}.zip"
 FLEURS = "https://huggingface.co/datasets/google/fleurs/resolve/main/data/"
@@ -111,24 +86,6 @@ def _guardar_16k(contenido, ruta):
         g = math.gcd(sr, SR)
         x = resample_poly(x, SR // g, sr // g).astype("float32")
     sf.write(ruta, x, SR)
-
-
-def bajar_commons():
-    """Entrevistas de Wikimedia Commons. Devuelve una tabla con la atribución de cada audio."""
-    destino = CARPETA / "entrevistas"
-    destino.mkdir(parents=True, exist_ok=True)
-    filas = []
-    for local, (titulo, autor, idioma, desc) in COMMONS.items():
-        ruta = destino / local
-        url = "https://commons.wikimedia.org/wiki/Special:FilePath/" + urllib.parse.quote(titulo)
-        if not ruta.exists():
-            ruta.write_bytes(_get(url))
-        filas.append({"archivo": local, "idioma": idioma, "descripcion": desc, "autor": autor,
-                      "licencia": "CC BY-SA 4.0",
-                      "fuente": "https://commons.wikimedia.org/wiki/File:" + urllib.parse.quote(titulo.replace(" ", "_"))})
-    tabla = pd.DataFrame(filas)
-    tabla.to_csv(destino / "atribucion.csv", index=False)
-    return tabla
 
 
 def bajar_openslr73(n_por_sexo=12, semilla=7):
@@ -226,7 +183,6 @@ def entrevista_simulada(pausa=0.7):
 
 
 if __name__ == "__main__":
-    print(bajar_commons()[["archivo", "idioma", "descripcion"]].to_string(index=False))
     es = bajar_openslr73()
     print(f"\nEspañol peruano: {len(es)} frases de {es['hablante'].nunique()} hablantes")
     en = bajar_fleurs_en()
