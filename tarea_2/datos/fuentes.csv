@@ -1,0 +1,57 @@
+id,modalidad,fuente_url,licencia,acceso
+doc_001,documento,https://commons.wikimedia.org/?curid=2121996,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_002,documento,https://commons.wikimedia.org/?curid=2229021,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_003,documento,https://commons.wikimedia.org/?curid=2263189,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_004,documento,https://commons.wikimedia.org/?curid=2044186,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_005,documento,https://commons.wikimedia.org/?curid=2284104,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_006,documento,https://commons.wikimedia.org/?curid=7279749,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_007,documento,https://commons.wikimedia.org/?curid=111181262,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_008,documento,https://commons.wikimedia.org/?curid=175594467,CC0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_009,documento,https://commons.wikimedia.org/?curid=154062977,CC BY-SA 4.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_010,documento,https://commons.wikimedia.org/?curid=154063152,CC BY-SA 4.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_011,documento,https://commons.wikimedia.org/?curid=154063179,CC BY-SA 4.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_012,documento,https://commons.wikimedia.org/?curid=124562195,CC BY-SA 4.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_013,documento,https://commons.wikimedia.org/?curid=150442442,CC0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_014,documento,https://commons.wikimedia.org/?curid=95621317,CC BY-SA 4.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_015,documento,https://commons.wikimedia.org/?curid=84154317,CC BY 3.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_016,documento,https://commons.wikimedia.org/?curid=153256484,CC BY 2.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_017,documento,https://commons.wikimedia.org/?curid=160615606,CC0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_018,documento,https://commons.wikimedia.org/?curid=160615612,CC0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_019,documento,https://commons.wikimedia.org/?curid=160615607,CC0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_020,documento,https://commons.wikimedia.org/?curid=15315035,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_021,documento,https://commons.wikimedia.org/?curid=67887441,CC BY-SA 4.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_022,documento,https://commons.wikimedia.org/?curid=190398555,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_023,documento,https://commons.wikimedia.org/?curid=131142697,CC BY-SA 4.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_024,documento,https://commons.wikimedia.org/?curid=131142702,CC BY-SA 4.0,Descarga con descargar() desde Commons / foto propia (no publicada)
+doc_025,documento,https://commons.wikimedia.org/?curid=5100641,Public domain,Descarga con descargar() desde Commons / foto propia (no publicada)
+clip_001,audio,https://commons.wikimedia.org/?curid=119950449,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_002,audio,https://commons.wikimedia.org/?curid=121363454,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_003,audio,https://commons.wikimedia.org/?curid=121363454,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_004,audio,https://commons.wikimedia.org/?curid=121363454,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_005,audio,https://commons.wikimedia.org/?curid=121363454,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_006,audio,https://commons.wikimedia.org/?curid=121363453,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_007,audio,https://commons.wikimedia.org/?curid=121363455,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_008,audio,https://commons.wikimedia.org/?curid=121363456,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_009,audio,https://commons.wikimedia.org/?curid=121363456,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_010,audio,https://commons.wikimedia.org/?curid=121363456,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_011,audio,https://commons.wikimedia.org/?curid=121219891,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_012,audio,https://commons.wikimedia.org/?curid=121219891,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_013,audio,https://commons.wikimedia.org/?curid=121219891,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_014,audio,https://commons.wikimedia.org/?curid=121219891,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_015,audio,https://commons.wikimedia.org/?curid=121219891,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_016,audio,https://commons.wikimedia.org/?curid=121219891,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_017,audio,https://commons.wikimedia.org/?curid=121219891,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_018,audio,https://commons.wikimedia.org/?curid=121219891,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_019,audio,https://commons.wikimedia.org/?curid=121219891,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_020,audio,https://commons.wikimedia.org/?curid=149445104,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_021,audio,https://commons.wikimedia.org/?curid=149433723,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_022,audio,https://commons.wikimedia.org/?curid=149433722,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_023,audio,https://commons.wikimedia.org/?curid=133964620,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_024,audio,https://commons.wikimedia.org/?curid=133964621,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_025,audio,https://commons.wikimedia.org/?curid=119262664,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_026,audio,https://www.openslr.org/73/,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_027,audio,https://www.openslr.org/73/,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_028,audio,https://www.openslr.org/73/,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_029,audio,https://www.openslr.org/73/,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_030,audio,https://www.openslr.org/73/,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
+clip_031,audio,https://www.openslr.org/73/,CC BY-SA 4.0,Descarga de Commons (AUDIOS_COMMONS) / clips_openslr73() en 01_extraccion.ipynb
