@@ -1,0 +1,3 @@
+modalidad,modelo,metrica,valor,rtf,elegido
+documento,"EasyOCR (es, CPU)",CER,0.878,,False
+documento,PaddleOCR PP-OCRv6 (base),CER,0.488,,True

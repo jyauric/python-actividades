@@ -1,0 +1,21 @@
+id,modalidad,tipo,modelo,texto,error,segundos
+doc_003,documento,impreso,PaddleOCR PP-OCRv6 (base),188 2 TMC El Banco del Peru Sagara CIEN PESOS alapista monedacorviente en estafecha Eos OGERENTES),2.4642857142857144,
+doc_005,documento,impreso,PaddleOCR PP-OCRv6 (base),LA DEL REPÚBLICA PERU en uonedade oro Al sapremo deceeto de 0étatre 18 de 1880 LIMA CIEMBRE,0.4489795918367347,
+doc_007,documento,impreso,PaddleOCR PP-OCRv6 (base),"Estrategias para acudir actuar ante indecopi 16, 17 y 18 de julio de 2009",0.0,
+doc_009,documento,foto,PaddleOCR PP-OCRv6 (base),ANCO DL HERRADOR,0.058823529411764705,
+doc_010,documento,foto,PaddleOCR PP-OCRv6 (base),FOAED BEYTIA,0.25,
+doc_011,documento,foto,PaddleOCR PP-OCRv6 (base),CALLE DE MELCHOMAL,0.1,
+doc_017,documento,manuscrito,PaddleOCR PP-OCRv6 (base),hadifia LIBRODE BAUTISMOS h a Stin  Que comiezael año yta 二 an 一7 h 2 G nld azelo e Dict,0.7076923076923077,
+doc_019,documento,manuscrito,PaddleOCR PP-OCRv6 (base),Tibro de Saulismos que comiéan. En la Grán Villa de Lampa- Dih e tfusil Kantiange Desde el 2s de Jel mil ochociontos selr yuno. hasta... Siendo Fura Ynter Dr. y su teni D.PERSONA_27. ent. UR.s. Sald Balma. And de 189s.,0.3288888888888889,
+doc_020,documento,manuscrito,PaddleOCR PP-OCRv6 (base),"ral & South American Telegraph Co. RECIBO. 1915 Para,BirKlit Oherl 1915 LBT Ralabras, Tasa, Empleado,C Fechal",0.40336134453781514,
+doc_025,documento,manuscrito,PaddleOCR PP-OCRv6 (base),"POLICIA DE LIMA TARJETA DE CIRCULACION Los Agentes de Policía y de la fuerza 1921 pública permitirán circular libremente la per- sona y el carruaje del eir Capitan di havis PERSONA_26 bonandante dil braee ""libia Wiembre de la Emba fra Italiana y cortar filas si no hay impedimento de fuerza mayor. El Prefecto de Lima 0soDve Esta tarjeta es intranalerible",0.1225071225071225,
+doc_003,documento,impreso,"EasyOCR (es, CPU)",2828 2828 100 3 7/// J6 21BanCOdol Peru 'Juguuí CEN PESOS útnchvustau íonedtuenrvnteenestahchn 10? #EETES (enunn { touououoouaDDDomnmcAmnMqconAuDADODOUIUOIDDD TTmunmroma,5.0,1.01
+doc_005,documento,impreso,"EasyOCR (es, CPU)",noneeat { #r0 Octhr } 2ne2 ~REPÚBLICA DEL PERU,0.7959183673469388,0.29
+doc_007,documento,impreso,"EasyOCR (es, CPU)",Estrategias para acudir @Gtuar ante indecopi 16 07y 18 dejulio de 2009,0.06944444444444445,0.15
+doc_009,documento,foto,"EasyOCR (es, CPU)",BAICC DI HEpRAD OR,0.29411764705882354,4.33
+doc_010,documento,foto,"EasyOCR (es, CPU)",CAEN BEYTI,0.25,2.9
+doc_011,documento,foto,"EasyOCR (es, CPU)",CALLE IJE AO MFLhor L,0.5,3.63
+doc_017,documento,manuscrito,"EasyOCR (es, CPU)","LIBRO DE BAUTISMOS Qup (OMienza 8/ 8h0 /6568' Iehm 0| ain ,722 0.L9 Iriv AA 0 11 52 JY ,",0.5846153846153846,13.39
+doc_019,documento,manuscrito,"EasyOCR (es, CPU)","gibtø $ Ssawismos que comigzan CGn {a San ~aa &c Yamfa _ 0 { dpsll éhnatingn Ood e/ 2s d mil ohkciontossdto 9/ 44/77 0 hasto Yicndc @ua ' àl@L. 4 { Iuí (htc Aqual 81.3. %id ,de /5%1",0.5688888888888889,11.85
+doc_020,documento,manuscrito,"EasyOCR (es, CPU)","l ral & South American Telegraph Co. RECIBO Para, ZaliaOL Tasa, L 1515 Palabras Fecha, Empleado, Z",0.42016806722689076,0.7
+doc_025,documento,manuscrito,"EasyOCR (es, CPU)",POLICIA DE LIMA TARJETA DE CIRCULACION Los Agentes de Pollcía y de la fuerza públlca permitirán circular libremente la per - 1921 sona y el carruaje del Qx^^ 64 4a @LhatRa_dihene 2494 b2adau& Ee Tuerhe d l Z11 y cortar filas si no hay impedimento de fuerza mayor EI Prefecto de Lima (02/0d0 Foo _ Esta tarjeta es intranaerible.,0.2934472934472934,3.77
