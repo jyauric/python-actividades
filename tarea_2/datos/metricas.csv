@@ -1,3 +1,5 @@
 modalidad,modelo,metrica,valor,rtf,elegido
+audio,Qwen3-ASR 0.6B (MPS),WER,0.162,0.071,False
+audio,"faster-whisper small (CPU, int8, VAD) · base",WER,0.139,0.103,True
 documento,"EasyOCR (es, CPU)",CER,0.878,,False
 documento,PaddleOCR PP-OCRv6 (base),CER,0.488,,True

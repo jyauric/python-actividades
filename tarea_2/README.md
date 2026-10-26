@@ -21,17 +21,23 @@ Muestra fija de 10 documentos (3 impresos, 3 fotos, 4 manuscritos) con referenci
 |---|---|---|---|---|---|---|
 | Documento | **PaddleOCR PP-OCRv6 (base)** | CER | **0.49** | 0.14 | 0.97 | 0.39 |
 | Documento | EasyOCR (es, CPU) | CER | 0.88 | 0.35 | 1.96 | 0.47 |
-| Audio | faster-whisper `small` vs. Qwen3-ASR 0.6B | WER | pendiente | | | |
 
-Pendiente: WER de los 10 clips (referencias manuales de audio), extracción con Gemini y auditoría de 20 extracciones.
+Muestra fija de 10 clips (4 de OpenSLR 73 en estudio y 6 de Commons en la calle) con referencia manual; WER promedio y factor de tiempo real (RTF):
+
+| Modalidad | Modelo | Métrica | Valor | RTF | Commons (calle) | OpenSLR (estudio) |
+|---|---|---|---|---|---|---|
+| Audio | **faster-whisper `small`** (CPU, int8, VAD) | WER | **0.14** | 0.10 | 0.19 | 0.07 |
+| Audio | Qwen3-ASR 0.6B (GPU MPS) | WER | 0.16 | 0.07 | 0.25 | 0.03 |
+
+**Extracción con LLM:** Gemini (`gemini-3.5-flash-lite`, `temperature=0`) sobre los 56 textos; auditoría humana de 20 extracciones al azar (10 documentos y 10 audios): **13/20 completamente correctas (65 %)**. Los 7 errores son de documentos (3/10 correctos frente a 10/10 en audio), con OCR deficiente (el LLM completa o «reconstruye» datos que el texto no sustenta).
 
 ## Hallazgos
-1. PaddleOCR supera a EasyOCR en los tres tipos de documento (CER 0.49 frente a 0.88); la ventaja es mayor en fotos de letreros (0.14 frente a 0.35), donde EasyOCR fragmenta y desordena las palabras.
-2. Los impresos con tipografía ornamental (billetes del siglo XIX) son los más difíciles para ambos modelos (CER cercano o mayor a 1: el OCR inserta texto de los grabados que no está en la referencia), más que las fotos con sombra o ángulo.
+1. En documentos, PaddleOCR supera a EasyOCR en los tres tipos de documento (CER 0.49 frente a 0.88); la ventaja es mayor en fotos de letreros (0.14 frente a 0.35), donde EasyOCR fragmenta y desordena las palabras. Los impresos con tipografía ornamental (billetes del siglo XIX) son los más difíciles para ambos (CER cercano o mayor a 1: el OCR inserta texto de los grabados que no está en la referencia), más que las fotos con sombra o ángulo.
+2. En audio no hay un modelo mejor en todo: Qwen3-ASR es casi perfecto en habla leída de estudio (WER 0.03) y más rápido (RTF 0.07), pero `small` resiste mejor el ruido de calle (0.19 frente a 0.25); por eso se elige `small` para entrevistas reales.
 
 ## Limitaciones
 1. La diarización sobrestima el número de hablantes en las entrevistas de calle (hasta 7 en un clip de 95 s) por el ruido y los turnos cortos; en los clips de OpenSLR se fijó 1 hablante porque se sabe de antemano.
-2. El OCR de los manuscritos antiguos (Libro de Bautismos de Lampa, siglos XVII–XIX) tiene confianza baja y produce texto poco útil; además, la seudonimización difusa reemplazó por error la palabra «Obras» por un seudónimo (falso positivo que sobreprotege).
+2. El OCR de los manuscritos antiguos (Libro de Bautismos de Lampa, siglos XVII–XIX) tiene confianza baja y produce texto poco útil; además, la seudonimización difusa reemplazó por error las palabras «Obras» y «otras» por un seudónimo (falso positivo de la clave «Poras», que sobreprotege). La auditoría del LLM no cuenta esos reemplazos como errores del modelo.
 
 ## Cómo ejecutar en local
     # con uv (recomendado)
