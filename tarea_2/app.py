@@ -97,10 +97,10 @@ with resumen:
     g1, g2 = st.columns(2)
     largo = docs_f.assign(n_caracteres=docs_f.texto_ocr.fillna("").str.len())
     g1.plotly_chart(px.box(largo, x="tipo", y="n_caracteres", points="all",
-                           title="Los manuscritos producen menos texto OCR que los impresos"),  # ← tu hallazgo
+                           title="Los manuscritos (carteles escolares y libros parroquiales) generan más texto OCR que impresos y fotos"),
                     width="stretch")
     g2.plotly_chart(px.histogram(auds_f, x="duracion_seg", nbins=20,
-                                 title="La mayoría de clips dura entre 1 y 2 minutos"),          # ← tu hallazgo
+                                 title="La mitad de los clips dura 60 s: son los tramos en que se cortaron las entrevistas largas"),
                     width="stretch")
     st.dataframe(docs_f[["id", "tipo", "fuente", "modelo_ocr", "texto_ocr"]], width="stretch")
     descargar(docs_f, "documentos_filtrados.csv")
