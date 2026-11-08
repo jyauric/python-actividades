@@ -298,9 +298,42 @@ def comparar_series(codigo_a: str, codigo_b: str, desde: str, hasta: str) -> dic
         "nota": NOTA_TASAS,
     }
 
-# TODO 4 · Un recurso, por ejemplo la plantilla bcrp://serie/{codigo} con la ficha de la serie.
+# --- TODO 4 · recurso ---------------------------------------------------------------------------------------------
+# Un recurso lo adjunta el usuario como contexto (en Claude Code: @bcrp:bcrp://serie/PN39445PM);
+# una herramienta, en cambio, la decide llamar el modelo.
 
-# TODO 5 · Un prompt, por ejemplo informe(tema) que pida citar el código y el periodo de cada cifra.
+@mcp.resource("bcrp://serie/{codigo}")
+def ficha_serie(codigo: str) -> str:
+    """Ficha de una serie del BCRP: código, nombre, categoría, frecuencia, inicio de datos y última actualización."""
+    f = _ficha(codigo.strip().upper())
+    return "\n".join([
+        f"Código: {f['codigo']}",
+        f"Nombre: {f['nombre']}",
+        f"Categoría: {f['categoria']}",
+        f"Frecuencia: {f['frecuencia']}",
+        f"Datos desde: {f['inicio']}",
+        f"Última actualización: {f['actualizada']}",
+        f"Fuente: {URL_CATALOGO}",
+    ])
+
+
+# --- TODO 5 · prompt ----------------------------------------------------------------------------------------------
+# Plantilla de instrucciones reutilizable; en Claude Code: /mcp__bcrp__informe <tema>
+
+@mcp.prompt
+def informe(tema: str) -> str:
+    """Pide un informe breve sobre un tema con series del BCRP, con cifras verificables y citadas."""
+    return (
+        f"Prepara un informe breve sobre: {tema}.\n\n"
+        "Reglas:\n"
+        "1. Busca las series con buscar_series y confirma su nombre y frecuencia antes de usarlas.\n"
+        "2. No hagas cuentas a mano: usa resumen para una serie y comparar_series para comparar dos.\n"
+        "3. Cada cifra debe citar el código de la serie, el periodo y la fuente (URL del BCRP).\n"
+        "4. Si una serie ya es una tasa o porcentaje (p. ej. 'var% 12 meses'), expresa sus cambios en puntos "
+        "porcentuales, no como variación porcentual.\n"
+        "5. Describe asociaciones y diferencias, sin afirmar causalidad.\n"
+        "6. Si un dato no está disponible, dilo; no lo estimes ni lo inventes."
+    )
 
 
 if __name__ == "__main__":
