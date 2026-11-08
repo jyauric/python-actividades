@@ -189,14 +189,114 @@ def serie(codigo: str, desde: str, hasta: str) -> dict:
     return {"codigo": ficha["codigo"], "nombre": ficha["nombre"], "frecuencia": ficha["frecuencia"],
             "datos": [{"periodo": p, "valor": v} for p, v in datos], "fuente": url}
 
-# TODO 2 · resumen(codigo, desde, hasta): primero, ultimo, cambio, variacion_pct, promedio, maximo y minimo
-#   (los tres últimos con su periodo). Úsenla para que el modelo nunca haga cuentas a mano.
+# --- TODO 2 · resumen -------------------------------------------------------------------------------------------
 
-# TODO 3 · Una herramienta suya, bien descrita. Ideas:
-#   - comparar_paises con la API del Banco Mundial, que tampoco pide clave:
-#     https://api.worldbank.org/v2/country/PER;CHL;COL/indicator/NY.GDP.MKTP.KD.ZG?format=json&date=2015:2025
-#   - correlacion(codigo_a, codigo_b, desde, hasta)
-#   - grafico(codigo, desde, hasta) que guarde un PNG en salidas/ y devuelva la ruta
+NOTA_TASAS = ("Si la serie ya es una tasa o porcentaje (p. ej. 'var% 12 meses'), usa 'cambio' en puntos "
+              "porcentuales; 'variacion_pct' solo tiene sentido para niveles e índices.")
+# El catálogo del BCRP no informa la unidad de medida (columna vacía en las 17,167 series, revisado el 8/11/2026),
+# así que no se intenta adivinar si una serie es tasa: se devuelven ambos cálculos y esta nota, siempre.
+
+
+def _punto(par):
+    periodo, valor = par
+    return {"periodo": periodo, "valor": round(valor, 4)}
+
+
+@mcp.tool(annotations=SOLO_LECTURA)
+def resumen(codigo: str, desde: str, hasta: str) -> dict:
+    """Resume una serie del BCRP entre dos fechas, con cálculos hechos en Python (no los hagas a mano).
+
+    Devuelve: primero y ultimo {periodo, valor}; cambio = ultimo - primero; variacion_pct = (ultimo/primero - 1)*100;
+    promedio; maximo y minimo {periodo, valor}; n (número de datos); código, nombre, URL de la fuente y una nota.
+    Ojo con la unidad: si la serie YA es una tasa o porcentaje (p. ej. "var% 12 meses"), lo que tiene sentido
+    es "cambio" (en puntos porcentuales), no "variacion_pct". variacion_pct sirve para niveles e índices.
+    Fechas como en serie: mensual "2025-01", trimestral "2025-T1", diaria "2026-10-01", anual "2025".
+    """
+    ficha, datos, url = _serie(codigo.strip().upper(), desde, hasta)
+    valores = [v for _, v in datos]
+    primero, ultimo = datos[0], datos[-1]
+    return {
+        "codigo": ficha["codigo"], "nombre": ficha["nombre"], "frecuencia": ficha["frecuencia"],
+        "n": len(datos),
+        "primero": _punto(primero),
+        "ultimo": _punto(ultimo),
+        "cambio": round(ultimo[1] - primero[1], 4),
+        "variacion_pct": round((ultimo[1] / primero[1] - 1) * 100, 4) if primero[1] != 0 else None,
+        "promedio": round(sum(valores) / len(valores), 4),
+        "maximo": _punto(max(datos, key=lambda d: d[1])),  # si hay empate, el primer periodo
+        "minimo": _punto(min(datos, key=lambda d: d[1])),
+        "fuente": url,
+        "nota": NOTA_TASAS,
+    }
+
+# --- TODO 3 · herramienta propia: comparar_series ------------------------------------------------------------------
+# Compara VARIACIONES (no niveles), para que se puedan comparar series de distinta unidad o base.
+
+def _variacion(v0, v1):
+    return round((v1 / v0 - 1) * 100, 4) if v0 != 0 else None
+
+
+def _variaciones_anuales(datos):
+    """Último dato de cada año frente al último dato del año anterior, en %. Solo años con ambos datos.
+    Con datos mensuales completos es diciembre contra diciembre; si el último año está incompleto,
+    'hasta' muestra hasta qué periodo llega (p. ej. 2026-10 frente a 2025-12)."""
+    ultimo_del_anio = {}
+    for periodo, valor in sorted(datos):  # ordenados: queda el último periodo de cada año
+        ultimo_del_anio[int(periodo[:4])] = (periodo, valor)
+    salida = []
+    for anio in sorted(ultimo_del_anio):
+        if anio - 1 in ultimo_del_anio:
+            (p0, v0), (p1, v1) = ultimo_del_anio[anio - 1], ultimo_del_anio[anio]
+            salida.append({"anio": anio, "desde": p0, "hasta": p1, "variacion_pct": _variacion(v0, v1)})
+    return salida
+
+
+@mcp.tool(annotations=SOLO_LECTURA)
+def comparar_series(codigo_a: str, codigo_b: str, desde: str, hasta: str) -> dict:
+    """Compara cuánto VARIÓ cada una de dos series del BCRP en el mismo periodo, y cuál creció más.
+
+    Úsala con niveles o índices (p. ej. IPC Alimentos y Bebidas vs IPC sin Alimentos y Bebidas, índice Dic.2021=100).
+    Las dos series deben tener la misma frecuencia. Fechas como en serie (mensual "2025-01", etc.).
+    Para tener la variación anual de un año, pidan desde el último periodo del año anterior:
+    desde="2019-12", hasta="2024-12" da las variaciones de 2020 a 2024 y la del periodo completo.
+    Devuelve por serie: primero, ultimo, variacion_pct del periodo y variaciones_anuales; además
+    diferencia_pp = variacion_pct(a) - variacion_pct(b), crecio_mas, la comparación año a año, fuentes y una nota.
+    """
+    ca, cb = codigo_a.strip().upper(), codigo_b.strip().upper()
+    fa, fb = _ficha(ca), _ficha(cb)  # ToolError con el código si alguno no existe
+    if fa["frecuencia"] != fb["frecuencia"]:  # se revisa ANTES de descargar
+        raise ToolError(f"No se pueden comparar series de distinta frecuencia: {ca} es {fa['frecuencia']} y "
+                        f"{cb} es {fb['frecuencia']}. Elijan dos series con la misma frecuencia.")
+    lados = {}
+    for lado, codigo in (("a", ca), ("b", cb)):
+        ficha, datos, url = _serie(codigo, desde, hasta)
+        lados[lado] = {
+            "codigo": ficha["codigo"], "nombre": ficha["nombre"],
+            "primero": _punto(datos[0]), "ultimo": _punto(datos[-1]),
+            "variacion_pct": _variacion(datos[0][1], datos[-1][1]),
+            "variaciones_anuales": _variaciones_anuales(datos),
+            "fuente": url,
+        }
+    a, b = lados["a"], lados["b"]
+    if a["variacion_pct"] is None or b["variacion_pct"] is None:
+        diferencia, crecio_mas = None, None
+    else:
+        diferencia = round(a["variacion_pct"] - b["variacion_pct"], 4)
+        crecio_mas = a["codigo"] if diferencia > 0 else b["codigo"] if diferencia < 0 else "igual"
+    anuales_b = {x["anio"]: x for x in b["variaciones_anuales"]}
+    por_anio = []
+    for xa in a["variaciones_anuales"]:
+        xb = anuales_b.get(xa["anio"])
+        if xb and xa["variacion_pct"] is not None and xb["variacion_pct"] is not None:
+            por_anio.append({"anio": xa["anio"], "a": xa["variacion_pct"], "b": xb["variacion_pct"],
+                             "diferencia_pp": round(xa["variacion_pct"] - xb["variacion_pct"], 4)})
+    mismo_periodo = (a["primero"]["periodo"], a["ultimo"]["periodo"]) == (b["primero"]["periodo"], b["ultimo"]["periodo"])
+    return {
+        "frecuencia": fa["frecuencia"], "a": a, "b": b,
+        "diferencia_pp": diferencia, "crecio_mas": crecio_mas, "por_anio": por_anio,
+        "mismo_periodo": mismo_periodo,  # False: las series no cubren exactamente los mismos periodos
+        "nota": NOTA_TASAS,
+    }
 
 # TODO 4 · Un recurso, por ejemplo la plantilla bcrp://serie/{codigo} con la ficha de la serie.
 

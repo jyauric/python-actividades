@@ -69,3 +69,27 @@ def test_un_recurso():
 
 def test_un_prompt():
     assert len(asyncio.run(_con_cliente(lambda c: c.list_prompts()))) >= 1
+
+
+# --- Pruebas propias: comparar_series (no modifican las 8 originales de la sesión 04) -------------------------------
+
+def test_comparar_series_calcula_variaciones():
+    """A1: la variación de comparar_series coincide con un cálculo independiente hecho desde los datos de serie,
+    y diferencia_pp = variación(a) - variación(b). Series: IPC Alimentos y Bebidas vs IPC Sin Alimentos y Bebidas
+    (Lima Metropolitana, índice Dic.2021 = 100)."""
+    r = llamar("comparar_series", codigo_a="PN39445PM", codigo_b="PN38706PM", desde="2019-12", hasta="2024-12")
+    for lado, codigo in [("a", "PN39445PM"), ("b", "PN38706PM")]:
+        datos = llamar("serie", codigo=codigo, desde="2019-12", hasta="2024-12")["datos"]
+        esperado = (datos[-1]["valor"] / datos[0]["valor"] - 1) * 100
+        assert r[lado]["variacion_pct"] == pytest.approx(esperado, abs=0.01)
+    assert r["diferencia_pp"] == pytest.approx(r["a"]["variacion_pct"] - r["b"]["variacion_pct"], abs=0.01)
+    assert [x["anio"] for x in r["por_anio"]] == [2020, 2021, 2022, 2023, 2024]
+    # A2: valores verificados a mano en la web del BCRP el 8/11/2026 (la web muestra 2 decimales)
+    assert r["a"]["primero"]["valor"] == pytest.approx(90.59, abs=0.01)    # PN39445PM, dic-2019
+    assert r["a"]["ultimo"]["valor"] == pytest.approx(119.53, abs=0.01)    # PN39445PM, dic-2024
+
+
+def test_comparar_series_rechaza_frecuencias_distintas():
+    """Una serie mensual y una diaria no se comparan: error claro que menciona la frecuencia."""
+    with pytest.raises(ToolError, match="frecuencia"):
+        llamar("comparar_series", codigo_a="PN39445PM", codigo_b="PD04638PD", desde="2024-01", hasta="2024-12")
