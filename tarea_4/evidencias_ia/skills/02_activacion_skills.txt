@@ -1,0 +1,172 @@
+ ▐▛███▛█   Claude Code v2.1.319
+▝▜██████▀  Opus 5.5 · Claude Pro
+ ▝▝   ▝▝   ~/Documents/GitHub/python-actividades/tarea_4
+
+
+❯ Haz un mapa de la pobreza monetaria por departamento con ENAHO 2024           
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ Skill(mapeando-enaho)
+  ⎿  Successfully loaded skill
+
+  Ran 1 shell command (ctrl+o to expand)
+
+⏺ La skill mapeando-enaho se activó. Revisé qué hay antes de correr nada:
+
+  - Falta salidas/indicadores.csv: aparece como borrado en git, y tampoco existe
+    salidas/personas_2024.parquet.
+  - Sí están el geojson (datos/peru_departamental_simple.geojson) y los zips de
+    los módulos 02 y 34.
+  - Ya existe un mapas/pobreza_departamento_2024.png de antes, y se va a
+    sobrescribir.
+
+  Lo que haré si me das el OK:
+  1. Correr la skill limpiando-enaho para volver a generar la base y
+     indicadores.csv. Solo sigo si la validación no marca ningún [FALLA].
+  2. Correr mapear.py para hacer el mapa (25 unidades, unidas por código).
+  3. Describir el mapa con las cifras de indicadores.csv y la comparación con la
+     referencia de la sesión 16, sin afirmar causas.
+
+  ¿Procedo? Si el borrado del CSV fue intencional para probar la skill, el paso
+  1 lo vuelve a generar.
+
+✻ Cogitated for 13s · done 9:39 PM
+
+❯ sí, procede                                                                   
+
+⏺ Skill(limpiando-enaho)
+  ⎿  Successfully loaded skill
+
+⏺ Bash(uv run ~/Documents/GitHub/python-actividades/tarea_4/.
+      claude/skills/limpiando-enaho/scripts/limpiar.py; echo "exit=$?"; echo
+      ---; cat salidas…)
+  ⎿  warning: `VIRTUAL_ENV=~/Documents/GitHub/python-act
+     ividades/tarea2_clase/.venv` does not match the project environment pa
+     th `.venv` and will be ignored; use `--active` to target the active en
+     … +43 lines (ctrl+o to expand)
+  ⎿  Created salidas/indicadores.csv (+31 -0)
+       1 +nivel,codigo,categoria,pobreza_pct,pobreza_extrema_pct,personas
+         +_muestra,poblacion_expandida                                   
+       2 +nacional,,PERU,27.53,5.5,108664,34147768                       
+       3 +area,,Rural,39.44,15.6,36071,6486385                           
+       4 +area,,Urbana,24.74,3.13,72593,27661382                         
+       5 +sexo,,Hombre,27.37,5.37,52587,16453003                         
+       6 +sexo,,Mujer,27.68,5.62,56077,17694764                          
+       7 +departamento,01,AMAZONAS,26.08,6.15,3911,430252                
+       8 +departamento,02,ANCASH,22.88,5.76,4576,1199410                 
+       9 +departamento,03,APURIMAC,24.09,5.18,2500,474458                
+      10 +departamento,04,AREQUIPA,15.77,1.62,4645,1415224               
+      11 +departamento,05,AYACUCHO,33.04,9.24,3308,755197                
+      12 +departamento,06,CAJAMARCA,44.99,19.62,4468,1547849             
+      13 +departamento,07,CALLAO,33.77,4.98,3457,1138852                 
+      14 +departamento,08,CUSCO,18.54,2.15,3777,1380357                  
+      15 +departamento,09,HUANCAVELICA,33.61,11.28,3244,525028           
+      16 +departamento,10,HUANUCO,39.47,12.4,3903,910900                 
+      17 +departamento,11,ICA,5.91,0.15,4838,855183                      
+      18 +departamento,12,JUNIN,18.61,3.81,4658,1436462                  
+      19 +departamento,13,LA LIBERTAD,30.07,6.58,5028,2064878            
+      20 +departamento,14,LAMBAYEQUE,14.05,0.5,4405,1348585              
+      21 +departamento,15,LIMA,26.89,3.12,14823,11233286                 
+      22 +departamento,16,LORETO,42.61,15.01,5678,1121012                
+      23 +departamento,17,MADRE DE DIOS,11.14,1.53,2045,165829           
+      24 +departamento,18,MOQUEGUA,10.88,2.34,2511,196788                
+      25 +departamento,19,PASCO,39.28,8.27,2746,323033                   
+      26 +departamento,20,PIURA,31.81,4.36,5876,1970217                  
+      27 +departamento,21,PUNO,40.42,12.63,3112,1535441                  
+      28 +departamento,22,SAN MARTIN,21.99,4.45,4619,937167              
+      29 +departamento,23,TACNA,23.88,2.58,3622,375607                   
+      30 +departamento,24,TUMBES,26.6,1.06,2771,261973                   
+      31 +departamento,25,UCAYALI,27.12,3.33,4143,544778                 
+  ⎿  Updated salidas/validacion.txt (+1 -1)
+      1  Validación ENAHO 2024 (INEI) – limpiando-enaho
+      2 -Ejecutado: 2026-11-08 20:46                                     
+      2 +Ejecutado: 2026-11-08 21:41                                     
+      3  Archivos: 966-Modulo34/sumaria-2024.dta, 966-Modulo02/enaho01-20
+         24-200.dta
+      4  Método principal: residentes habituales (módulo 02) unidos a la 
+         sumaria; ponderación facpob07.
+      5  
+
+⏺ Validación sin [FALLA]. Ahora el mapa.
+
+  Searched for 1 pattern, read 1 file, ran 1 shell command (ctrl+o to expand)
+
+⏺ Listo. El mapa quedó en mapas/pobreza_departamento_2024.png.
+
+  Cómo llegué:
+  1. Corrí limpiando-enaho para volver a generar salidas/indicadores.csv. Todas
+     las validaciones dieron OK y ninguna [FALLA]. La pobreza nacional sale
+     27.53 % (referencia 27.6 % ± 0.1).
+     - Hay dos líneas [INFO]: urbana 24.74 % y rural 39.44 % con facpob07. Con
+       el método de la sumaria salen 24.81 % y 39.30 %, una diferencia de −0.07
+       y +0.14 pp que viene de la ponderación.
+  2. Corrí mapear.py. La unión por código (ubigeo[:2] = FIRST_IDDP) dio las 25
+     unidades, todas con dato, con Lima y Callao separados.
+
+  Qué muestra el mapa (todas las cifras salen de indicadores.csv):
+  - Más de 40 %: Cajamarca 44.99 %, Loreto 42.61 % y Puno 40.42 %.
+  - Entre 39 y 40 %: Huánuco 39.47 % y Pasco 39.28 %.
+  - Menos de 11.5 %: Ica 5.91 %, Moquegua 10.88 % y Madre de Dios 11.14 %.
+  - Lima y Callao: Lima 26.89 % y Callao 33.77 %, ampliados en un recuadro.
+  - Clases de 10 pp: 0–10 % (1 departamento), 10–20 % (6), 20–30 % (8), 30–40 %
+    (7) y 40–50 % (3).
+
+  El mapa describe cómo se reparte la pobreza en el territorio; no muestra sus
+  causas.
+
+  Comparación con la referencia de la sesión 16
+  (salidas/comparacion_referencia_mapa.csv): 11 de 25 departamentos están a 0.1
+  pp o menos. La mayor diferencia es Puno, con +0.52 pp.
+  - Causa: el conteo de personas. Los residentes habituales suman 108,664 y
+    mieperho suma 109,842. Con mieperho se reproducen las 25 cifras de
+    referencia (limpiando-enaho/reference.md).
+
+  Fuente: INEI – ENAHO 2024, residentes habituales, ponderado con facpob07.
+
+  salidas/indicadores.csv volvió a crearse, y la nueva ejecución reemplazó
+  validacion.txt, el PNG y la comparación. No hice commit.
+
+✻ Sautéed for 22s · done 9:41 PM
+
+❯ /graficando-enaho urbano vs rural                                             
+
+  Listed 1 directory (ctrl+o to expand)
+
+⏺ La base ya está lista: indicadores.csv y personas_2024.parquet existen y
+  salieron de la validación de recién, que dio todo OK.
+
+  Lo que haré si me das el OK:
+  - Correr graficar.py --tipo area, que hace el gráfico urbano vs rural con
+    pobreza total y extrema. Esto sobrescribe el figuras/pobreza_area_2024.png
+    que ya existe.
+  - Describir el gráfico con las cifras de indicadores.csv y citar la fuente,
+    sin afirmar que las diferencias son significativas ni que tienen una causa.
+
+  ¿Procedo?
+
+✻ Churned for 7s · done 9:43 PM
+
+❯ sí, procede                                                                   
+
+  Read 1 file, ran 1 shell command (ctrl+o to expand)
+
+⏺ Listo. El gráfico quedó en figuras/pobreza_area_2024.png y reemplazó al
+  anterior.
+
+  Qué muestra (cifras de indicadores.csv):
+  - Pobreza total: rural 39.44 % y urbana 24.74 %. La brecha es de 14.7 pp, como
+    dice el título del gráfico.
+  - Pobreza extrema: rural 15.6 % y urbana 3.13 %.
+  - Cada barra separa la parte extrema (oscura) de la no extrema (clara).
+  - El área urbana son los centros poblados de 2 000 habitantes o más (estrato
+    1–5), según la regla de la sesión 16.
+
+  El gráfico muestra una asociación entre el área de residencia y la pobreza, no
+  su causa. No se calcularon intervalos de confianza.
+
+  Fuente: INEI – ENAHO 2024, residentes habituales, ponderado con facpob07.
+
+  No hice commit.
+
+✻ Baked for 8s · done 9:45 PM

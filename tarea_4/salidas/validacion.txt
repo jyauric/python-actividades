@@ -1,5 +1,5 @@
 Validación ENAHO 2024 (INEI) – limpiando-enaho
-Ejecutado: 2026-11-08 20:46
+Ejecutado: 2026-11-08 21:41
 Archivos: 966-Modulo34/sumaria-2024.dta, 966-Modulo02/enaho01-2024-200.dta
 Método principal: residentes habituales (módulo 02) unidos a la sumaria; ponderación facpob07.
 
