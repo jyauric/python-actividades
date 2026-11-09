@@ -1,0 +1,21 @@
+Validación ENAHO 2024 (INEI) – limpiando-enaho
+Ejecutado: 2026-11-08 20:46
+Archivos: 966-Modulo34/sumaria-2024.dta, 966-Modulo02/enaho01-2024-200.dta
+Método principal: residentes habituales (módulo 02) unidos a la sumaria; ponderación facpob07.
+
+[OK] Llave de hogar única en la sumaria: 33,691 hogares
+[OK] Residentes habituales: obtenido 108,664; referencia 108,664 (de 117,721 filas del módulo 02)
+[OK] Llave de persona única entre residentes: 108,664 personas
+[OK] La unión no pierde ni duplica filas: 108,664 -> 108,664
+[OK] Todas las personas encuentran su hogar: sin hogar: 0
+[OK] Factor de expansión facpob07 sin vacíos y positivo: población expandida 34,147,768
+[OK] Unidades territoriales (ubigeo[:2]): obtenido 25; referencia 25
+[OK] Residentes con sexo informado: sin dato: 0
+[OK] Pobreza nacional (facpob07): obtenido 27.53 %; referencia 27.6 % ± 0.1
+[OK] Control cruzado: pobreza nacional con la sumaria (factor07 × mieperho): 27.58 %; método principal 27.53 %; diferencia +0.05 pp
+[OK] Pobreza urbana, método sumaria (factor07 × mieperho): obtenido 24.81 %; referencia 24.8 % ± 0.1
+[OK] Pobreza rural, método sumaria (factor07 × mieperho): obtenido 39.30 %; referencia 39.3 % ± 0.1
+[INFO] Pobreza urbana, método principal (facpob07): 24.74 %; diferencia con método sumaria -0.07 pp (ponderación)
+[INFO] Pobreza rural, método principal (facpob07): 39.44 %; diferencia con método sumaria +0.14 pp (ponderación)
+
+Resultado: todas las validaciones esenciales OK
