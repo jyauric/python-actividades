@@ -332,7 +332,8 @@ def informe(tema: str) -> str:
         "4. Si una serie ya es una tasa o porcentaje (p. ej. 'var% 12 meses'), expresa sus cambios en puntos "
         "porcentuales, no como variación porcentual.\n"
         "5. Describe asociaciones y diferencias, sin afirmar causalidad.\n"
-        "6. Si un dato no está disponible, dilo; no lo estimes ni lo inventes."
+        "6. Si un dato no está disponible, dilo; no lo estimes ni lo inventes.\n"
+        "7. Para saber hasta cuándo hay datos, consulta la serie hasta la fecha actual; no lo supongas."
     )
 
 
