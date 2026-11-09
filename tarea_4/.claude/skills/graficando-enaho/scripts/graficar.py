@@ -26,6 +26,8 @@ AZUL, AZUL_CLARO, AZUL_OSCURO = "#2a78d6", "#86b6ef", "#1c5cab"
 
 FUENTE = ("Fuente: INEI – ENAHO 2024 (módulos 34 y 02). Residentes habituales, ponderado con facpob07. "
           "Elaboración propia.")
+NOTA_REDONDEO = ("Diferencias calculadas con cifras sin redondear; pueden diferir en ±0,1 de la resta de los "
+                 "valores mostrados.")
 
 
 def nombre(depto):
@@ -69,12 +71,12 @@ def guardar(fig, archivo):
 
 def grafico_area(ind):
     d = ind[ind.nivel == "area"].set_index("categoria").loc[["Urbana", "Rural"]]
-    u, r = round(d.loc["Urbana", "pobreza_pct"], 1), round(d.loc["Rural", "pobreza_pct"], 1)
+    u, r = d.loc["Urbana", "pobreza_pct"], d.loc["Rural", "pobreza_pct"]   # sin redondear: se redondea al mostrar
     mayor, menor = ("rural", "urbana") if r >= u else ("urbana", "rural")
     titulo = (f"La pobreza {mayor} ({max(u, r):.1f} %) supera en {abs(r - u):.1f} pp a la {menor} "
               f"({min(u, r):.1f} %)")
     fig, ax = lienzo()
-    fig.subplots_adjust(top=0.80, bottom=0.17, left=0.08, right=0.97)
+    fig.subplots_adjust(top=0.80, bottom=0.21, left=0.08, right=0.97)
     x = range(len(d))
     extrema = d.pobreza_extrema_pct
     no_extrema = d.pobreza_pct - d.pobreza_extrema_pct
@@ -93,16 +95,16 @@ def grafico_area(ind):
     ax.set_axisbelow(True)
     ax.legend(frameon=False, loc="upper left", fontsize=9, labelcolor=TEXTO_2)
     textos(fig, titulo, "Pobreza monetaria total y extrema por área de residencia. Perú, 2024 (% de la población)",
-           "Área urbana: centros poblados de 2 000 habitantes a más (estrato 1–5).")
+           "Área urbana: centros poblados de 2 000 habitantes a más (estrato 1–5).\n" + NOTA_REDONDEO)
     guardar(fig, "pobreza_area_2024.png")
 
 
 def grafico_sexo(ind):
     d = ind[ind.nivel == "sexo"].set_index("categoria").loc[["Mujer", "Hombre"]]
-    m, h = round(d.loc["Mujer", "pobreza_pct"], 1), round(d.loc["Hombre", "pobreza_pct"], 1)
+    m, h = d.loc["Mujer", "pobreza_pct"], d.loc["Hombre", "pobreza_pct"]   # sin redondear: se redondea al mostrar
     titulo = f"Pobreza monetaria: mujeres {m:.1f} % y hombres {h:.1f} % (diferencia de {abs(m - h):.1f} pp)"
     fig, ax = lienzo()
-    fig.subplots_adjust(top=0.80, bottom=0.19, left=0.08, right=0.97)
+    fig.subplots_adjust(top=0.80, bottom=0.21, left=0.08, right=0.97)
     x = range(len(d))
     ax.bar(x, d.pobreza_pct, width=0.45, color=AZUL, edgecolor=SUPERFICIE, linewidth=2)
     for i, v in enumerate(d.pobreza_pct):
@@ -114,7 +116,7 @@ def grafico_sexo(ind):
     ax.set_axisbelow(True)
     textos(fig, titulo, "Pobreza monetaria por sexo. Perú, 2024 (% de la población)",
            "No se calcularon intervalos de confianza: una diferencia pequeña puede no ser estadísticamente "
-           "significativa.")
+           "significativa.\n" + NOTA_REDONDEO)
     guardar(fig, "pobreza_sexo_2024.png")
 
 
