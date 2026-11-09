@@ -15,6 +15,6 @@ description: Limpia y valida la ENAHO 2024 del INEI (módulo 34 sumaria y módul
 
 3. **Si falla, detente.** Si el comando termina con error o `salidas/validacion.txt` tiene alguna línea `[FALLA]`, muestra el reporte al usuario y no calcules nada más. No modifiques el script ni las referencias para que la validación pase.
 
-4. **Responde con los archivos, no con cuentas a mano.** Lee `salidas/validacion.txt` y `salidas/indicadores.csv`. Toda cifra que des debe salir de esos archivos e indicar: INEI – ENAHO 2024, residentes habituales, ponderado con `facpob07`. Menciona las líneas `[REVISAR]` si las hay.
+4. **Responde con los archivos, no con cuentas a mano.** Lee `salidas/validacion.txt` y `salidas/indicadores.csv`. Toda cifra que des debe salir de esos archivos e indicar: INEI – ENAHO 2024, residentes habituales, ponderado con `facpob07`. Menciona las líneas `[REVISAR]` e `[INFO]`, con su explicación (p. ej. las diferencias de ponderación entre `facpob07` y `factor07 × mieperho` descritas en `reference.md`).
 
 5. Para el detalle de variables, reglas y tolerancias, consulta `reference.md`.
