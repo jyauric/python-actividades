@@ -61,4 +61,20 @@ Las referencias urbana/rural del enunciado se reproducen con el método de la su
 
 Según el README de la sesión 16, la pobreza nacional 2024 da 27.53 % con personas y `facpob07`, y 27.58 % con la sumaria y `factor07 × mieperho`.
 
+## De dónde viene la diferencia con las referencias (verificado el 8/11/2026)
+
+Los dos métodos difieren en dos cosas: el factor y el conteo de personas por hogar. Cambiando una sola a la vez:
+
+| Conteo de personas ↓ / Factor → | `facpob07` | `factor07` |
+|---|---|---|
+| Residentes habituales (módulo 02, filtro `p204/p205/p206`): **108,664** | **27.53 %** (método principal) | **27.53 %** |
+| `mieperho` (sumaria, “total de miembros del hogar”): **109,842** | — | **27.58 %** (= referencias) |
+
+- Cambiar el factor no cambia la tasa (también urbano 24.74 y rural 39.44 quedan iguales). **La diferencia la produce el conteo de personas.**
+- Residentes por hogar = `mieperho` en 31,845 de 33,691 hogares (94.5 %); difieren en 1,846 (de −6 a +7 personas).
+- A nivel nacional las diferencias casi se compensan (0.05 pp); por departamento, con muestras más chicas, llegan a 0.52 pp (Puno).
+- El método de la sumaria reproduce **todas** las referencias del curso: nacional, urbana, rural y las 25 departamentales de `referencias/pobreza_departamento_2024.csv` (sesión 16; 25 de 25 al redondear a 1 decimal).
+- **Decisión:** se mantiene el método principal (residentes habituales + `facpob07`) porque es el que pide el enunciado (filtrar residentes habituales y unir personas con hogares); la diferencia queda explicada por cobertura de miembros del hogar.
+- No verificado: qué criterio usa el INEI para `mieperho`, qué método usa para su cifra oficial, ni si `facpob07` y `factor07` son idénticos persona por persona.
+
 Si una validación esencial falla, el script se detiene (código 1) y no guarda indicadores ni la base. Los resultados no se corrigen para que coincidan con las referencias: se investiga la causa.
